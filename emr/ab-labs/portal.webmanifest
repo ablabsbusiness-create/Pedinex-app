@@ -1,0 +1,27 @@
+{
+  "name": "The Better Kids Clinic Patient Portal",
+  "short_name": "Kids Portal",
+  "description": "View and download your prescriptions from The Better Kids Clinic.",
+  "start_url": "/emr/kid/portal.html",
+  "scope": "/emr/kid/portal.html",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "background_color": "#eef4ef",
+  "theme_color": "#15803d",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/emr/kid/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/emr/kid/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["medical", "health"]
+}
