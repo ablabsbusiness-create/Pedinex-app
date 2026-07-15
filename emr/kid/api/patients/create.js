@@ -2,7 +2,7 @@ import admin from 'firebase-admin';
 import { getAdminDb } from '../_firebase-admin.js';
 
 const CLINIC_NAMESPACE = 'clinics/main';
-const PATIENT_ID_PREFIX = '__CLINIC_SHORT_NAME__';
+const PATIENT_ID_PREFIX = 'TEST';
 const PATIENT_ID_WIDTH = 4;
 
 function sendJson(res, statusCode, payload) {

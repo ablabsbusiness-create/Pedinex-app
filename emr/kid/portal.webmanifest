@@ -1,6 +1,6 @@
 {
   "name": "PediaNex Patient Portal",
-  "short_name": "__CLINIC_SHORT_NAME__",
+  "short_name": "TEST",
   "description": "View and download your prescriptions from PediaNex.",
   "start_url": "/portal.html",
   "scope": "/portal.html",

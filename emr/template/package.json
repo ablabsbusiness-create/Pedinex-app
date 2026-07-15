@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "setup": "node scripts/setup-template.js",
+    "apply-branding": "node scripts/apply-branding.js",
     "predev": "node ./scripts/ensure-iap-assets.mjs",
     "dev": "vite",
     "prebuild": "node ./scripts/ensure-iap-assets.mjs",

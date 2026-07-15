@@ -34,6 +34,19 @@ e.g. `SPC0001`), doctor name, phone, address, email, domain, and WhatsApp
 number, then replaces every `__TOKEN__` placeholder across the project with
 your answers. You can re-run it any time to catch anything you left blank.
 
+**Alternative — one file instead of prompts:** copy
+`clinic-branding.env.example` to `clinic-branding.env`, fill in the same
+values there, and run:
+
+```bash
+npm run apply-branding
+```
+
+This does the same placeholder replacement but reads from that single file
+instead of asking questions — useful if you want to see/edit every value in
+one place, or re-apply after changing one later. Both approaches are
+interchangeable; use whichever is more convenient.
+
 ## 4. Create a Firebase project
 
 1. Go to <https://console.firebase.google.com> and create a new project.

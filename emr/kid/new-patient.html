@@ -34,12 +34,12 @@
       "name": "PediaNex",
       "url": "https://pedinex-app.vercel.app/",
       "telephone": [
-        "__CLINIC_PHONE__",
-        "__CLINIC_PHONE__"
+        "7357397888",
+        "7357397888"
       ],
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "__CLINIC_ADDRESS__",
+        "streetAddress": "Rajasthan",
         "addressLocality": "",
         "postalCode": "",
         "addressCountry": "IN"
@@ -792,7 +792,7 @@
     import { doc, getDoc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
     import { db } from './lib/firebase-init.js';
     const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
-    const PATIENT_ID_PREFIX = '__CLINIC_SHORT_NAME__';
+    const PATIENT_ID_PREFIX = 'TEST';
     const PATIENT_ID_WIDTH = 4;
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
@@ -856,7 +856,7 @@
     }
 
     function isTbkPatientId(value) {
-      return /^__CLINIC_SHORT_NAME__\d{4,}$/i.test(String(value || '').trim());
+      return /^TEST\d{4,}$/i.test(String(value || '').trim());
     }
 
     function formatPatientId(serial) {
@@ -1130,7 +1130,7 @@
       }
 
       if (!isTbkPatientId(result.patientId)) {
-        throw new Error(`Unexpected patient ID "${result.patientId}". Kid patients must use __CLINIC_SHORT_NAME__ IDs.`);
+        throw new Error(`Unexpected patient ID "${result.patientId}". Kid patients must use TEST IDs.`);
       }
 
       const savedRecord = {
