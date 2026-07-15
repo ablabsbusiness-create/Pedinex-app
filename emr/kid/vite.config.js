@@ -87,6 +87,30 @@ function readRequestBody(req) {
   });
 }
 
+function cleanUrlsMiddleware(root, base) {
+  return (req, res, next) => {
+    const requestUrl = new URL(req.url || '/', 'http://localhost');
+    let pathname = requestUrl.pathname;
+
+    if (base && pathname.startsWith(base)) {
+      pathname = pathname.slice(base.length - 1);
+    }
+
+    if (pathname.endsWith('.html') || pathname.endsWith('/') || pathname.includes('.')) {
+      next();
+      return;
+    }
+
+    const candidate = resolve(root, `.${pathname}.html`);
+
+    if (existsSync(candidate)) {
+      req.url = `${base.slice(0, -1)}${pathname}.html${requestUrl.search}`;
+    }
+
+    next();
+  };
+}
+
 export default defineConfig({
   root: __dirname,
   envDir: __dirname,
@@ -98,6 +122,15 @@ export default defineConfig({
     }
   },
   plugins: [
+    {
+      name: 'clean-urls',
+      configureServer(server) {
+        server.middlewares.use(cleanUrlsMiddleware(__dirname, '/emr/kid/'));
+      },
+      configurePreviewServer(server) {
+        server.middlewares.use(cleanUrlsMiddleware(__dirname, '/emr/kid/'));
+      }
+    },
     {
       name: 'copy-growth-chart-assets',
       closeBundle() {
