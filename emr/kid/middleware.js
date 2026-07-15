@@ -23,7 +23,6 @@ export default async function middleware(request) {
 
   if (isProtectedPath(pathname) && !authenticated) {
     const destination = new URL(buildLoginRedirect(pathname, search), request.url);
-    destination.searchParams.set('debugBuild', 'v2-should-not-redirect');
     return Response.redirect(destination, 302);
   }
 
