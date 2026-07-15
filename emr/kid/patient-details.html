@@ -2377,6 +2377,7 @@
     import { getDownloadURL, getMetadata, listAll, ref } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js';
     import { db, storage } from './lib/firebase-init.js';
     const CLINIC_FIREBASE_NAMESPACE = import.meta.env.VITE_CLINIC_NAMESPACE || 'clinics/kid-pedinex-dev';
+    const LEGACY_FIRESTORE_FALLBACK_ENABLED = CLINIC_FIREBASE_NAMESPACE === 'clinics/kid';
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
       pendingPatients: `${CLINIC_FIREBASE_NAMESPACE}/pendingPatients`,
@@ -2848,7 +2849,7 @@
         }
       }
 
-      const { snapshot, usedLegacy: usedLegacyPatients } = await getDocsWithLegacyFallback(FIREBASE_COLLECTIONS.patients, 'patients');
+      const { snapshot, usedLegacy: usedLegacyPatients } = await getDocsWithLegacyFallback(FIREBASE_COLLECTIONS.patients, LEGACY_FIRESTORE_FALLBACK_ENABLED ? 'patients' : null);
       const patientRecords = snapshot.docs
         .map((docSnapshot) => ({ id: docSnapshot.id, ...docSnapshot.data() }))
         .filter((patient) => !usedLegacyPatients || recordBelongsToCurrentClinic(patient));
@@ -5071,7 +5072,7 @@
             });
         }
 
-        getDocsWithLegacyFallback(FIREBASE_COLLECTIONS.history, 'history', [orderBy('createdAtIso', 'desc'), limit(HISTORY_FETCH_LIMIT)])
+        getDocsWithLegacyFallback(FIREBASE_COLLECTIONS.history, LEGACY_FIRESTORE_FALLBACK_ENABLED ? 'history' : null, [orderBy('createdAtIso', 'desc'), limit(HISTORY_FETCH_LIMIT)])
           .then(({ snapshot: historySnapshot, usedLegacy: usedLegacyHistory }) => {
         const remoteHistory = historySnapshot.docs
           .map((docSnapshot) => normalizePrescriptionEntry({
