@@ -133,17 +133,21 @@ function printNextSteps() {
   console.log('   - Enable Firestore (Native mode) for patient records, prescriptions, vaccinations.');
   console.log('   - Enable Storage for prescription/certificate PDFs.');
   console.log('   - Register a Web App and copy the firebaseConfig values.');
-  console.log('2. Copy .env.example to .env and fill in the VITE_FIREBASE_* values plus');
+  console.log('2. Publish the security rules in firebase/firestore.rules and');
+  console.log('   firebase/storage.rules to your Firebase project (Console > Firestore');
+  console.log('   Database > Rules, and Console > Storage > Rules). The __CLINIC_SHORT_NAME__');
+  console.log('   placeholder in both files has already been replaced by this script.');
+  console.log('3. Copy .env.example to .env and fill in the VITE_FIREBASE_* values plus');
   console.log('   CLINIC_ACCESS_PASSWORD and CLINIC_SESSION_SECRET.');
   console.log('   Generate a session secret with:');
   console.log('     node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"');
-  console.log('3. If you use the patient portal OTP login, sign up at https://msg91.com,');
+  console.log('4. If you use the patient portal OTP login, sign up at https://msg91.com,');
   console.log('   create a Widget under OTP > Widgets, and add MSG91_AUTH_KEY,');
   console.log('   VITE_MSG91_WIDGET_ID, and VITE_MSG91_TOKEN_AUTH to your .env / Vercel project.');
-  console.log('4. Run `npm run dev` to start local development.');
-  console.log('5. Create a new Vercel project, set the Root Directory to this folder, and set');
+  console.log('5. Run `npm run dev` to start local development.');
+  console.log('6. Create a new Vercel project, set the Root Directory to this folder, and set');
   console.log('   all the same environment variables in the Vercel project settings.');
-  console.log('6. Deploy, then test: patient portal login, adding a test patient, generating a');
+  console.log('7. Deploy, then test: patient portal login, adding a test patient, generating a');
   console.log('   prescription/certificate PDF, and growth chart rendering.');
   console.log('\nSee README.md for the full walkthrough.\n');
 }

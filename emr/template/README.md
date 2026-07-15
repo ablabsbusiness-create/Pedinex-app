@@ -53,7 +53,38 @@ your answers. You can re-run it any time to catch anything you left blank.
    Firebase Admin SDK to create patients and this key is how they
    authenticate. Keep this file secret; never commit it.
 
-## 5. Create your `.env` file
+## 5. Deploy Firestore and Storage security rules
+
+This template ships with security rules in `firebase/firestore.rules` and
+`firebase/storage.rules`. They scope every read/write to this clinic's own
+`clinics/__CLINIC_SHORT_NAME__` namespace and deny everything else — the same
+model the original clinic deployment uses, just for a single tenant instead
+of an allowlist of clinics. If you already ran `npm run setup` (step 3), the
+`__CLINIC_SHORT_NAME__` placeholder in both files is already replaced with
+your clinic's short code; if not, re-run `npm run setup` or edit the two
+files by hand before deploying them.
+
+Deploy them from the Firebase Console (simplest, no extra tooling):
+
+1. **Firestore rules**: Firebase Console > Firestore Database > **Rules**
+   tab > paste the contents of `firebase/firestore.rules` > **Publish**.
+2. **Storage rules**: Firebase Console > Storage > **Rules** tab > paste the
+   contents of `firebase/storage.rules` > **Publish**.
+
+Or, if you use the [Firebase CLI](https://firebase.google.com/docs/cli):
+
+```bash
+firebase deploy --only firestore:rules,storage:rules --project <your-firebase-project-id>
+```
+
+(This requires a `firebase.json` pointing at these rule files and
+`firebase login` first — the Console method above needs neither.)
+
+Without these rules published, Firestore/Storage fall back to their default
+"all access denied" mode and the app won't be able to read or write any
+data.
+
+## 6. Create your `.env` file
 
 ```bash
 cp .env.example .env
@@ -77,7 +108,7 @@ Fill in:
 
   Run it twice and use a different value for each secret.
 
-## 6. Set up MSG91 (patient portal phone OTP login)
+## 7. Set up MSG91 (patient portal phone OTP login)
 
 The patient portal (`portal.html`) authenticates parents with a phone-number
 OTP, verified through MSG91's widget flow (not Firebase phone auth).
@@ -98,7 +129,7 @@ If you don't need the patient portal, you can skip this section — the rest
 of the EMR (staff login, patients, prescriptions, growth charts, vaccination,
 certificates) does not depend on MSG91.
 
-## 7. Local development
+## 8. Local development
 
 ```bash
 npm run dev
@@ -112,7 +143,7 @@ run when served by Vercel — use `vercel dev` (from the Vercel CLI) instead of
 `vite dev` if you need to exercise the patient portal OTP flow or the
 "create/next patient ID" endpoints locally.
 
-## 8. Deploy to Vercel
+## 9. Deploy to Vercel
 
 1. Push this folder to a Git repository (or use the Vercel CLI directly).
 2. Create a new Vercel project and import the repository.
@@ -128,7 +159,7 @@ run when served by Vercel — use `vercel dev` (from the Vercel CLI) instead of
    already set in `vercel.json`.)
 6. Deploy.
 
-## 9. Post-deploy checklist
+## 10. Post-deploy checklist
 
 After the first deploy, verify:
 
@@ -149,6 +180,10 @@ After the first deploy, verify:
   OTP auth, and patient creation/ID allocation. `lib/` contains the shared
   session and Firebase-init helpers used by both the frontend and the API
   routes.
+- `firebase/firestore.rules` and `firebase/storage.rules` are the security
+  rules from step 5, scoped to this clinic's own `clinics/__CLINIC_SHORT_NAME__`
+  namespace. They are not deployed automatically — you publish them to your
+  Firebase project by hand or via the Firebase CLI.
 - `scripts/setup-template.js` is the branding script from step 3.
   `scripts/ensure-iap-assets.mjs` and `scripts/render_growth_charts.py` are
   used at build/dev time to prepare growth chart assets — leave these as-is.
