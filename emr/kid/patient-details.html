@@ -2376,7 +2376,7 @@
     import { collection, doc, getDocs, limit, orderBy, query, serverTimestamp, setDoc, where } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
     import { getDownloadURL, getMetadata, listAll, ref } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js';
     import { db, storage } from './lib/firebase-init.js';
-    const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
+    const CLINIC_FIREBASE_NAMESPACE = import.meta.env.VITE_CLINIC_NAMESPACE || 'clinics/kid-pedinex-dev';
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
       pendingPatients: `${CLINIC_FIREBASE_NAMESPACE}/pendingPatients`,
@@ -2873,7 +2873,7 @@
         return true;
       }
 
-      return marker === 'kid' || marker === CLINIC_FIREBASE_NAMESPACE.toLowerCase();
+      return marker === CLINIC_FIREBASE_NAMESPACE.toLowerCase();
     }
 
     function setPrescriptionPreviewLoading(previewElement, message = 'Loading prescription preview...') {

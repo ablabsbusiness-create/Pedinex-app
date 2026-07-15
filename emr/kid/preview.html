@@ -964,7 +964,7 @@
     import { arrayUnion, collection, doc, getDoc, getDocs, increment, query, serverTimestamp, setDoc, where, writeBatch } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
     import { getDownloadURL, getMetadata, ref, uploadBytes } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js';
     import { db, storage } from './lib/firebase-init.js';
-    const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
+    const CLINIC_FIREBASE_NAMESPACE = import.meta.env.VITE_CLINIC_NAMESPACE || 'clinics/kid-pedinex-dev';
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
       pendingPatients: `${CLINIC_FIREBASE_NAMESPACE}/pendingPatients`,

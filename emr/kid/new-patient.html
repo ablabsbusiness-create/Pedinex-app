@@ -791,7 +791,7 @@
   <script type="module">
     import { doc, getDoc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
     import { db } from './lib/firebase-init.js';
-    const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
+    const CLINIC_FIREBASE_NAMESPACE = import.meta.env.VITE_CLINIC_NAMESPACE || 'clinics/kid-pedinex-dev';
     const PATIENT_ID_PREFIX = 'TBK';
     const PATIENT_ID_WIDTH = 4;
     const FIREBASE_COLLECTIONS = {
