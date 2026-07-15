@@ -23,9 +23,8 @@ export default async function middleware(request) {
 
   if (isProtectedPath(pathname) && !authenticated) {
     const destination = new URL(buildLoginRedirect(pathname, search), request.url);
-    const redirectResponse = Response.redirect(destination, 302);
-    redirectResponse.headers.set('X-Debug-Build', 'gate-removed-still-redirecting');
-    return redirectResponse;
+    destination.searchParams.set('debugBuild', 'v2-should-not-redirect');
+    return Response.redirect(destination, 302);
   }
 
   return;
