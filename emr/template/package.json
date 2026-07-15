@@ -1,0 +1,23 @@
+{
+  "name": "emr-template",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "setup": "node scripts/setup-template.js",
+    "predev": "node ./scripts/ensure-iap-assets.mjs",
+    "dev": "vite",
+    "prebuild": "node ./scripts/ensure-iap-assets.mjs",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^7.1.5"
+  },
+  "dependencies": {
+    "firebase": "^12.13.0",
+    "firebase-admin": "^13.10.0",
+    "jspdf": "^3.0.3",
+    "pdfjs-dist": "^5.6.205"
+  }
+}

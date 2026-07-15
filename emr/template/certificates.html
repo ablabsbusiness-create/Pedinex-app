@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Certificates | __CLINIC_NAME__ EMR</title>
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="description" content="Certificates page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
+  <link rel="canonical" href="https://__CLINIC_DOMAIN__/certificates" />
+  <script type="module" src="./auth-guard.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #eef4ef;
+      --panel: #fcfdf8;
+      --panel-strong: #ffffff;
+      --ink: #1b2a21;
+      --muted: #607067;
+      --line: #d7e2d9;
+      --brand: #166534;
+      --brand-soft: #dcfce7;
+      --brand-strong: #14532d;
+      --accent: #b45309;
+      --accent-soft: #ffedd5;
+      --danger: #b91c1c;
+      --shadow: 0 18px 45px rgba(22, 38, 29, 0.08);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Outfit', system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(34, 197, 94, 0.14), transparent 28%),
+        linear-gradient(180deg, #f5faf3 0%, #edf5ef 100%);
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      background: rgba(248, 252, 248, 0.85);
+      border-bottom: 1px solid rgba(215, 226, 217, 0.95);
+      box-shadow: 0 8px 24px rgba(22, 38, 29, 0.05);
+    }
+
+    .topbar {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      background: linear-gradient(135deg, #166534, #22c55e);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(22, 101, 52, 0.22);
+    }
+
+    .brand-copy strong { display: block; font-size: 15px; line-height: 1.1; }
+    .brand-copy span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-left: auto;
+      min-width: 0;
+    }
+
+    .nav-link {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border-radius: 999px;
+      color: #5f6f66;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+
+    .nav-link:hover, .nav-link.active { background: #dcfce7; color: #14532d; }
+
+    .page-shell {
+      width: min(1220px, calc(100% - 32px));
+      margin: 22px auto 96px;
+    }
+
+    @media (max-width: 640px) {
+      .page-shell { width: calc(100% - 20px); margin: 14px auto 88px; }
+    }
+
+    .patient-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 16px 18px;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(215, 226, 217, 0.9);
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .patient-bar { padding: 12px 14px; }
+    }
+
+    .patient-bar h1 { margin: 0 0 4px; font-size: 22px; line-height: 1.2; }
+    .patient-bar p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+    @media (max-width: 640px) {
+      .patient-bar h1 { font-size: 18px; }
+      .patient-bar p { font-size: 12px; }
+    }
+
+    .patient-bar-link {
+      min-height: 44px;
+      padding: 0 16px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #f8fbf9;
+      color: var(--brand-strong);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    #status-note {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f6faf7;
+      border: 1px solid #dce9de;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    #status-note.warning { color: #9a3412; background: #fff7ed; border-color: #fed7aa; }
+    #status-note.ready { color: var(--brand-strong); background: #f2fbf4; border-color: #d4ebd9; }
+
+    .panel-card {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(215, 226, 217, 0.6);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .panel-card { padding: 12px; border-radius: var(--radius-md); }
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin: 0 0 10px;
+    }
+
+    .panel-title .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      font-size: 10px;
+    }
+
+    .library-select-wrap { position: relative; }
+
+    .library-select {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 40px 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #ffffff;
+      color: var(--ink);
+      font: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+
+    .library-select:focus {
+      outline: none;
+      border-color: rgba(22, 101, 52, 0.45);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+    }
+
+    .library-select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      width: 9px;
+      height: 9px;
+      border-right: 2px solid var(--brand-strong);
+      border-bottom: 2px solid var(--brand-strong);
+      transform: translateY(-65%) rotate(45deg);
+      pointer-events: none;
+    }
+
+    .mobile-tabs {
+      display: none;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .mobile-tab {
+      flex: 1;
+      background: #f8fbf9;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .mobile-tab.is-active {
+      background: linear-gradient(135deg, #166534, #15803d);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
+      .mobile-tabs { display: flex; }
+      [data-panel] { display: none; min-width: 0; }
+      [data-panel].is-active-panel { display: block; }
+    }
+
+    .selected-template-tag {
+      display: inline-flex;
+      width: fit-content;
+      margin-top: 10px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .selected-template-tag.preset { background: #eef2ff; color: #4338ca; }
+    .selected-template-tag.custom { background: var(--accent-soft); color: #9a3412; }
+    .selected-template-tag[hidden] { display: none; }
+
+    .history-list { display: grid; gap: 8px; margin-top: 14px; }
+
+    .history-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f8fbf9;
+      font-size: 12px;
+    }
+
+    .history-row strong { display: block; font-size: 13px; color: var(--ink); }
+    .history-row span { color: var(--muted); }
+
+    .history-view-link {
+      min-height: 36px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid #d8e7db;
+      color: var(--brand-strong);
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 640px) {
+      .history-view-link { min-height: 40px; padding: 0 16px; }
+    }
+
+    .history-empty {
+      padding: 12px;
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .editor-grid { display: grid; gap: 12px; }
+
+    .field { display: grid; gap: 6px; }
+    .field label { font-size: 12px; font-weight: 700; color: var(--ink); }
+
+    .field input[type="text"], .field input[type="date"] {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font: inherit;
+      font-size: 16px;
+      background: var(--panel-strong);
+    }
+
+    .placeholder-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .placeholder-chip {
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid #d8e7db;
+      background: #ffffff;
+      color: var(--brand-strong);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .placeholder-chip:hover { background: var(--brand-soft); }
+
+    #body-editor {
+      min-height: 180px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: var(--panel-strong);
+      font-size: 16px;
+      line-height: 1.7;
+      outline: none;
+    }
+
+    @media (max-width: 640px) {
+      #body-editor { min-height: 140px; }
+    }
+
+    #body-editor:focus { border-color: rgba(22, 101, 52, 0.45); box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12); }
+
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 13px;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:disabled { cursor: wait; opacity: 0.7; }
+    button:hover:not(:disabled) { transform: translateY(-1px); }
+
+    .btn-primary { background: linear-gradient(135deg, #166534, #15803d); color: #fff; box-shadow: 0 12px 24px rgba(22, 101, 52, 0.22); }
+    .btn-secondary { background: #f8fbf9; color: var(--ink); border: 1px solid var(--line); }
+    .btn-danger { background: #fee2e2; color: var(--danger); }
+    .btn-whatsapp { background: #25d366; color: #fff; box-shadow: 0 12px 24px rgba(37, 211, 102, 0.22); }
+
+    @media (max-width: 640px) {
+      .btn-row { gap: 8px; }
+      .btn-row button { flex: 1 1 calc(50% - 4px); min-height: 44px; }
+    }
+
+    .sticky-actions {
+      position: sticky;
+      bottom: 12px;
+      z-index: 15;
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      margin-top: 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(215, 226, 217, 0.95);
+      box-shadow: 0 18px 45px rgba(22, 38, 29, 0.16);
+    }
+
+    .sticky-actions button { min-height: 46px; }
+    .sticky-actions #print-btn,
+    .sticky-actions #whatsapp-btn { flex: 0 1 auto; padding: 0 22px; }
+    .sticky-actions #generate-btn { flex: 1 1 auto; }
+
+    @media (max-width: 480px) {
+      .sticky-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "print whatsapp" "save save";
+        border-radius: 22px;
+      }
+      .sticky-actions #print-btn { grid-area: print; padding: 0 10px; }
+      .sticky-actions #whatsapp-btn { grid-area: whatsapp; padding: 0 10px; }
+      .sticky-actions #generate-btn { grid-area: save; padding: 0 10px; }
+    }
+
+    .preview-outer {
+      background: #dfe8e1;
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      display: flex;
+      justify-content: center;
+    }
+
+    #cert-sheet-clip {
+      overflow: hidden;
+    }
+
+    #cert-sheet-scale {
+      transform-origin: top left;
+    }
+
+    #cert-sheet {
+      width: 210mm;
+      background: #ffffff;
+      box-shadow: 0 18px 45px rgba(22, 38, 29, 0.18);
+      padding: 18mm 16mm;
+      font-family: 'Outfit', system-ui, sans-serif;
+      color: #10172a;
+    }
+
+    .cert-clinic-header { text-align: center; border-bottom: 2px solid #166534; padding-bottom: 10px; margin-bottom: 14px; }
+    .cert-clinic-header strong { display: block; font-size: 20px; color: #14532d; }
+    .cert-clinic-header span { display: block; font-size: 11px; color: #4a5a4f; margin-top: 4px; line-height: 1.5; }
+
+    .cert-title {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin: 4px 0 18px;
+      color: #14532d;
+    }
+
+    .cert-patient-info {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px 16px;
+      padding: 10px 12px;
+      border: 1px solid #d7e2d9;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-size: 11.5px;
+    }
+
+    .cert-patient-info div span { color: #607067; }
+
+    .cert-body { font-size: 13.5px; line-height: 1.9; min-height: 120px; }
+    .cert-body p { margin: 0 0 10px; }
+
+    .cert-footer { margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .cert-footer-date { font-size: 12px; color: #4a5a4f; }
+    .cert-signature { text-align: center; }
+    .cert-signature img { max-height: 46px; max-width: 160px; display: block; margin: 0 auto 4px; }
+    .cert-signature-line { width: 180px; border-top: 1px solid #10172a; margin-top: 6px; padding-top: 4px; font-size: 11.5px; }
+    .cert-signature-line strong { display: block; font-size: 12.5px; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #cert-sheet, #cert-sheet * { visibility: visible; }
+      #cert-sheet-clip { overflow: visible !important; width: auto !important; height: auto !important; }
+      #cert-sheet-scale { transform: none !important; width: auto !important; height: auto !important; }
+      #cert-sheet { position: absolute; left: 0; top: 0; box-shadow: none; }
+    }
+
+    [hidden] { display: none !important; }
+  </style>
+  <link rel="stylesheet" href="mobile-app.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="topbar">
+      <a class="brand" href="/search">
+        <span class="brand-mark">CT</span>
+        <span class="brand-copy">
+          <strong>__CLINIC_NAME__</strong>
+          <span>Certificates</span>
+        </span>
+      </a>
+      <nav id="primary-nav" class="nav-links" aria-label="Primary">
+        <a class="nav-link" href="/">Dashboard</a>
+        <a class="nav-link active" href="/search">Enter Clinic</a>
+        <a class="nav-link" href="/pending-approvals">Approvals</a>
+        <a class="nav-link" href="/settings">Settings</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <div class="patient-bar">
+      <div>
+        <h1 id="patient-name-label">Loading patient...</h1>
+        <p id="patient-meta-label">&nbsp;</p>
+      </div>
+      <a id="back-to-profile-link" class="patient-bar-link" href="/search">Back to profile</a>
+    </div>
+
+    <div id="status-note">Loading certificates module...</div>
+
+    <div class="panel-card">
+      <p class="panel-title"><span class="step-num">1</span>Choose A Certificate</p>
+      <div class="library-select-wrap">
+        <select id="library-select" class="library-select" aria-label="Choose a certificate"></select>
+      </div>
+      <span id="selected-template-tag" class="selected-template-tag custom" hidden>Custom</span>
+    </div>
+
+    <div class="mobile-tabs" role="tablist" aria-label="Editor view">
+      <button type="button" class="mobile-tab is-active" id="tab-edit-btn" data-tab="edit">Edit</button>
+      <button type="button" class="mobile-tab" id="tab-preview-btn" data-tab="preview">Preview</button>
+    </div>
+
+    <div class="layout">
+      <div class="panel-card is-active-panel" data-panel="edit">
+        <p class="panel-title"><span class="step-num">2</span>Fill In Details</p>
+        <div class="editor-grid">
+          <div class="field">
+            <label for="cert-title-input">Certificate Title</label>
+            <input id="cert-title-input" type="text" placeholder="e.g. Fitness Certificate" />
+          </div>
+
+          <div class="field">
+            <label>Insert Placeholder</label>
+            <div class="placeholder-row">
+              <button type="button" class="placeholder-chip" data-token="[PatientName]">Patient Name</button>
+              <button type="button" class="placeholder-chip" data-token="[Guardian]">Guardian</button>
+              <button type="button" class="placeholder-chip" data-token="[DOB]">DOB</button>
+              <button type="button" class="placeholder-chip" data-token="[Age]">Age</button>
+              <button type="button" class="placeholder-chip" data-token="[Gender]">Gender</button>
+              <button type="button" class="placeholder-chip" data-token="[Date]">Today's Date</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="body-editor">Certificate Body</label>
+            <div id="body-editor" contenteditable="true"></div>
+          </div>
+
+          <div class="btn-row">
+            <button id="fill-patient-info-btn" class="btn-secondary" type="button">Fill Patient Info</button>
+            <button id="save-custom-template-btn" class="btn-secondary" type="button">Save Template</button>
+            <button id="delete-custom-template-btn" class="btn-danger" type="button" hidden>Delete Template</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card" data-panel="preview">
+        <p class="panel-title"><span class="step-num">3</span>Preview &amp; Generate</p>
+        <div class="preview-outer">
+          <div id="cert-sheet-clip">
+          <div id="cert-sheet-scale">
+            <div id="cert-sheet">
+              <div class="cert-clinic-header">
+                <strong id="cert-clinic-name">__CLINIC_NAME__</strong>
+                <span id="cert-clinic-address"></span>
+              </div>
+              <div id="cert-title" class="cert-title">Select a certificate to begin</div>
+              <div class="cert-patient-info">
+                <div><span>Patient: </span><strong id="cert-info-name">-</strong></div>
+                <div><span>Gender: </span><strong id="cert-info-gender">-</strong></div>
+                <div><span>DOB: </span><strong id="cert-info-dob">-</strong></div>
+                <div><span>Age: </span><strong id="cert-info-age">-</strong></div>
+                <div><span>Guardian: </span><strong id="cert-info-guardian">-</strong></div>
+                <div><span>Mobile: </span><strong id="cert-info-mobile">-</strong></div>
+              </div>
+              <div id="cert-body" class="cert-body"></div>
+              <div class="cert-footer">
+                <div class="cert-footer-date"><span>Date: </span><strong id="cert-footer-date">-</strong></div>
+                <div class="cert-signature">
+                  <img id="cert-signature-img" src="" alt="Signature" hidden />
+                  <div class="cert-signature-line">
+                    <strong id="cert-doctor-name">__DOCTOR_NAME__</strong>
+                    <span id="cert-doctor-details">MBBS, DCH</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sticky-actions">
+      <button id="print-btn" class="btn-secondary" type="button">Print</button>
+      <button id="whatsapp-btn" class="btn-whatsapp" type="button">WhatsApp</button>
+      <button id="generate-btn" class="btn-primary" type="button">Save PDF To Patient Record</button>
+    </div>
+
+    <div class="panel-card">
+      <p class="panel-title" id="history-panel-title">Generated For This Patient</p>
+      <div id="history-list" class="history-list"></div>
+    </div>
+  </main>
+
+  <script type="module">
+    import {
+      doc, getDoc, setDoc, deleteDoc, addDoc, collection, getDocs, query, where, orderBy, limit, serverTimestamp
+    } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
+    import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js';
+    import { db, storage } from './lib/firebase-init.js';
+
+    const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
+    const FIREBASE_COLLECTIONS = {
+      patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
+      certificates: `${CLINIC_FIREBASE_NAMESPACE}/certificates`,
+      certificateHistory: `${CLINIC_FIREBASE_NAMESPACE}/certificateHistory`
+    };
+    const CLINIC_STORAGE_PREFIX = CLINIC_FIREBASE_NAMESPACE;
+    const BRANDING_DOC_PATH = [CLINIC_FIREBASE_NAMESPACE, 'clinicSettings', 'prescriptionBranding'];
+
+    const DEFAULT_BRANDING = {
+      clinicTitle: '__CLINIC_NAME__',
+      clinicAddress: '__CLINIC_NAME__ - __CLINIC_ADDRESS__',
+      doctorName: '__DOCTOR_NAME__',
+      doctorDetails: 'MBBS, DCH, DNB - Paediatrics, PGDDN, FPEM',
+      signatureDataUrl: ''
+    };
+
+    const PRESET_TEMPLATES = [
+      {
+        id: 'preset-fitness',
+        title: 'Fitness Certificate',
+        body: '<p>This is to certify that I have examined <b>[PatientName]</b>, [Gender] aged <b>[Age]</b>, child of <b>[Guardian]</b>, on <b>[Date]</b>.</p><p>On examination, the child was found to be clinically fit and healthy, with no signs of any communicable or infectious disease at the time of examination.</p><p><b>[PatientName]</b> is hereby certified fit to attend school / participate in regular activities with effect from _______.</p>'
+      },
+      {
+        id: 'preset-leave-after-illness',
+        title: 'Leave Certificate (After Illness)',
+        body: '<p>This is to certify that <b>[PatientName]</b>, [Gender] aged <b>[Age]</b>, child of <b>[Guardian]</b>, was under my treatment from _______ to _______ for _______.</p><p>The child has since recovered and is fit to resume school / regular activities with effect from _______.</p>'
+      },
+      {
+        id: 'preset-leave-during-illness',
+        title: 'Leave Certificate (During Illness)',
+        body: '<p>This is to certify that <b>[PatientName]</b>, [Gender] aged <b>[Age]</b>, child of <b>[Guardian]</b>, is currently under my treatment for _______.</p><p>The child is advised rest and leave from school / regular activities from _______ to _______.</p>'
+      },
+      {
+        id: 'preset-swimming',
+        title: 'Swimming Fitness Certificate',
+        body: '<p>This is to certify that I have examined <b>[PatientName]</b>, [Gender] aged <b>[Age]</b>, child of <b>[Guardian]</b>, on <b>[Date]</b>.</p><p>The child is found to be clinically fit and there is no medical contraindication to participation in swimming activities at this time.</p>'
+      },
+      {
+        id: 'preset-fitness-no-immunization',
+        title: 'Fitness Certificate (Without Immunization)',
+        body: '<p>This is to certify that I have examined <b>[PatientName]</b>, [Gender] aged <b>[Age]</b>, child of <b>[Guardian]</b>, on <b>[Date]</b> and found the child clinically fit for school admission / activities.</p><p><i>Note: This certificate does not confirm immunization status. Immunization records have not been verified as part of this examination.</i></p>'
+      },
+      {
+        id: 'preset-fitness-adult',
+        title: 'Fitness Certificate (Adult / Caregiver)',
+        body: '<p>This is to certify that I have examined <b>[Guardian]</b> on <b>[Date]</b> and found them to be clinically fit and free of any communicable or infectious disease at the time of examination.</p>'
+      },
+      {
+        id: 'preset-mother-leave',
+        title: "Mother's Leave Certificate",
+        body: '<p>This is to certify that <b>[Guardian]</b>, mother of <b>[PatientName]</b>, aged <b>[Age]</b>, is advised leave from work for a period of _______ for the care of the child, following _______.</p>'
+      },
+      {
+        id: 'preset-discharge-summary',
+        title: 'Discharge Summary',
+        body: '<p><b>Patient:</b> [PatientName], [Gender], aged [Age]<br><b>Guardian:</b> [Guardian]<br><b>Admission Date:</b> _______ &nbsp; <b>Discharge Date:</b> [Date]</p><p><b>Diagnosis:</b> _______</p><p><b>Treatment Given:</b> _______</p><p><b>Condition at Discharge:</b> Stable, general condition satisfactory.</p><p><b>Advice on Discharge:</b> _______</p><p><b>Follow-up:</b> _______</p>'
+      },
+      {
+        id: 'preset-covid',
+        title: 'COVID-19 Medical Certificate',
+        body: "<p>This is to certify that <b>[PatientName]</b>, [Gender] aged <b>[Age]</b>, child of <b>[Guardian]</b>, was evaluated by me on <b>[Date]</b>.</p><p>Based on clinical assessment, the child is fit to resume school / travel / regular activities, having completed the advised period of isolation / recovery from COVID-19.</p>"
+      }
+    ];
+
+    const params = new URLSearchParams(window.location.search);
+    const patientIdParam = (params.get('patientId') || '').trim().toUpperCase();
+
+    const statusNote = document.getElementById('status-note');
+    const patientNameLabel = document.getElementById('patient-name-label');
+    const patientMetaLabel = document.getElementById('patient-meta-label');
+    const backToProfileLink = document.getElementById('back-to-profile-link');
+    const librarySelect = document.getElementById('library-select');
+    const selectedTemplateTag = document.getElementById('selected-template-tag');
+    const historyPanelTitle = document.getElementById('history-panel-title');
+    const historyList = document.getElementById('history-list');
+    const certTitleInput = document.getElementById('cert-title-input');
+    const bodyEditor = document.getElementById('body-editor');
+    const fillPatientInfoBtn = document.getElementById('fill-patient-info-btn');
+    const saveCustomTemplateBtn = document.getElementById('save-custom-template-btn');
+    const deleteCustomTemplateBtn = document.getElementById('delete-custom-template-btn');
+    const printBtn = document.getElementById('print-btn');
+    const whatsappBtn = document.getElementById('whatsapp-btn');
+    const generateBtn = document.getElementById('generate-btn');
+
+    const tabEditBtn = document.getElementById('tab-edit-btn');
+    const tabPreviewBtn = document.getElementById('tab-preview-btn');
+    const editPanel = document.querySelector('[data-panel="edit"]');
+    const previewPanel = document.querySelector('[data-panel="preview"]');
+    const previewOuter = document.querySelector('.preview-outer');
+    const certSheetClip = document.getElementById('cert-sheet-clip');
+    const certSheetScale = document.getElementById('cert-sheet-scale');
+    const certSheetTitle = document.getElementById('cert-title');
+    const certSheetBody = document.getElementById('cert-body');
+    const certClinicName = document.getElementById('cert-clinic-name');
+    const certClinicAddress = document.getElementById('cert-clinic-address');
+    const certInfoName = document.getElementById('cert-info-name');
+    const certInfoGender = document.getElementById('cert-info-gender');
+    const certInfoDob = document.getElementById('cert-info-dob');
+    const certInfoAge = document.getElementById('cert-info-age');
+    const certInfoGuardian = document.getElementById('cert-info-guardian');
+    const certInfoMobile = document.getElementById('cert-info-mobile');
+    const certFooterDate = document.getElementById('cert-footer-date');
+    const certDoctorName = document.getElementById('cert-doctor-name');
+    const certDoctorDetails = document.getElementById('cert-doctor-details');
+    const certSignatureImg = document.getElementById('cert-signature-img');
+
+    let currentPatient = null;
+    let patientLoaded = false;
+    let templates = [];
+    let selectedTemplateId = '';
+    let isBlankDraft = false;
+    let branding = { ...DEFAULT_BRANDING };
+
+    function formatDateDisplay(dateValue, fallback = 'Not saved') {
+      if (!dateValue) return fallback;
+      const parsed = new Date(dateValue);
+      if (Number.isNaN(parsed.getTime())) return String(dateValue);
+      return parsed.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function calculateAge(dobValue) {
+      const dob = new Date(dobValue);
+      if (Number.isNaN(dob.getTime())) return 'Not saved';
+      const now = new Date();
+      const months = Math.max(0, Math.floor((now.getFullYear() - dob.getFullYear()) * 12 + now.getMonth() - dob.getMonth()));
+      if (months < 24) return `${months} month${months === 1 ? '' : 's'}`;
+      const years = Math.floor(months / 12);
+      return `${years} year${years === 1 ? '' : 's'}`;
+    }
+
+    function getPatientName(patient) {
+      return patient?.childName || [patient?.firstName, patient?.middleName, patient?.lastName].filter(Boolean).join(' ') || 'Unnamed child';
+    }
+
+    async function loadBranding() {
+      if (!db) return;
+      try {
+        const snapshot = await getDoc(doc(db, ...BRANDING_DOC_PATH));
+        if (snapshot.exists()) {
+          branding = { ...DEFAULT_BRANDING, ...snapshot.data() };
+        }
+      } catch (error) {
+        console.warn(`Unable to load clinic branding: ${error.message}`);
+      }
+      certClinicName.textContent = branding.clinicTitle || DEFAULT_BRANDING.clinicTitle;
+      certClinicAddress.textContent = branding.clinicAddress || DEFAULT_BRANDING.clinicAddress;
+      certDoctorName.textContent = branding.doctorName || DEFAULT_BRANDING.doctorName;
+      certDoctorDetails.textContent = (branding.doctorDetails || DEFAULT_BRANDING.doctorDetails).split('\n')[0];
+      if (branding.signatureDataUrl) {
+        certSignatureImg.src = branding.signatureDataUrl;
+        certSignatureImg.hidden = false;
+      }
+    }
+
+    async function loadPatient(patientId) {
+      if (!patientId) {
+        patientNameLabel.textContent = 'No patient selected';
+        patientMetaLabel.textContent = 'Open this page from a patient profile to generate certificates.';
+        statusNote.textContent = 'Open this page from a patient profile to load patient details.';
+        statusNote.className = 'warning';
+        return;
+      }
+
+      if (!db) {
+        statusNote.textContent = 'Cloud records are not configured.';
+        statusNote.className = 'warning';
+        return;
+      }
+
+      backToProfileLink.href = `/search?patientId=${encodeURIComponent(patientId)}`;
+      statusNote.textContent = 'Loading patient details...';
+
+      const snapshot = await getDoc(doc(db, FIREBASE_COLLECTIONS.patients, patientId));
+      if (!snapshot.exists()) {
+        currentPatient = { patientId };
+        patientLoaded = false;
+        patientNameLabel.textContent = 'Patient not found';
+        patientMetaLabel.textContent = `Patient ID ${patientId} was not found.`;
+        statusNote.textContent = 'Patient record not found. You can still browse templates, but info fields will be blank.';
+        statusNote.className = 'warning';
+      } else {
+        currentPatient = { id: snapshot.id, patientId: snapshot.data().patientId || patientId, ...snapshot.data() };
+        patientLoaded = true;
+        patientNameLabel.textContent = getPatientName(currentPatient);
+        patientMetaLabel.textContent = `${currentPatient.gender || 'Gender not saved'} - DOB ${formatDateDisplay(currentPatient.dob)} - Guardian ${currentPatient.parentName || 'Not saved'}`;
+        statusNote.textContent = 'Patient loaded. Pick a certificate below — patient details fill in automatically.';
+        statusNote.className = 'ready';
+      }
+
+      certInfoName.textContent = getPatientName(currentPatient) || '-';
+      certInfoGender.textContent = currentPatient.gender || '-';
+      certInfoDob.textContent = formatDateDisplay(currentPatient.dob, '-');
+      certInfoAge.textContent = currentPatient.dob ? calculateAge(currentPatient.dob) : '-';
+      certInfoGuardian.textContent = currentPatient.parentName || '-';
+      certInfoMobile.textContent = currentPatient.mobileNumber || '-';
+      certFooterDate.textContent = formatDateDisplay(new Date().toISOString());
+
+      await loadHistory(patientId);
+    }
+
+    async function seedPresetTemplatesIfNeeded() {
+      const snapshot = await getDocs(collection(db, FIREBASE_COLLECTIONS.certificates));
+      if (!snapshot.empty) return;
+      await Promise.all(PRESET_TEMPLATES.map((tpl) => setDoc(doc(db, FIREBASE_COLLECTIONS.certificates, tpl.id), {
+        title: tpl.title,
+        body: tpl.body,
+        category: 'preset',
+        createdAt: serverTimestamp()
+      })));
+    }
+
+    async function loadTemplates() {
+      if (!db) {
+        templates = PRESET_TEMPLATES.map((tpl) => ({ ...tpl, category: 'preset' }));
+        return;
+      }
+      try {
+        await seedPresetTemplatesIfNeeded();
+        const snapshot = await getDocs(query(collection(db, FIREBASE_COLLECTIONS.certificates), orderBy('createdAt', 'desc')));
+        templates = snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+      } catch (error) {
+        console.warn(`Unable to load certificate templates: ${error.message}`);
+        templates = PRESET_TEMPLATES.map((tpl) => ({ ...tpl, category: 'preset' }));
+      }
+    }
+
+    function renderLibrary() {
+      const options = templates.map((tpl) => `
+        <option value="${tpl.id}">${escapeHtml(tpl.title || 'Untitled form')}${tpl.category === 'preset' ? '' : ' (Custom)'}</option>
+      `);
+      options.push(`<option value="__new__">+ Make Your Own Form</option>`);
+      librarySelect.innerHTML = options.join('');
+      librarySelect.value = isBlankDraft ? '__new__' : selectedTemplateId;
+
+      const selected = templates.find((tpl) => tpl.id === selectedTemplateId);
+      if (!isBlankDraft && selected && selected.category !== 'preset') {
+        selectedTemplateTag.hidden = false;
+        selectedTemplateTag.textContent = 'Custom';
+        selectedTemplateTag.className = 'selected-template-tag custom';
+      } else {
+        selectedTemplateTag.hidden = true;
+      }
+    }
+
+    function escapeHtml(value) {
+      const div = document.createElement('div');
+      div.textContent = value == null ? '' : String(value);
+      return div.innerHTML;
+    }
+
+    function selectTemplate(templateId) {
+      const source = templates.find((tpl) => tpl.id === templateId);
+      if (!source) return;
+
+      selectedTemplateId = templateId;
+      isBlankDraft = false;
+      certTitleInput.value = source.title || '';
+      bodyEditor.innerHTML = patientLoaded ? substitutePlaceholders(source.body || '') : (source.body || '');
+      deleteCustomTemplateBtn.hidden = false;
+      renderLibrary();
+      updatePreview();
+    }
+
+    function selectBlankTemplate() {
+      selectedTemplateId = '';
+      isBlankDraft = true;
+      certTitleInput.value = '';
+      bodyEditor.innerHTML = '<p>Type your certificate text here. Use the placeholder buttons to insert patient details.</p>';
+      deleteCustomTemplateBtn.hidden = true;
+      renderLibrary();
+      updatePreview();
+      certTitleInput.focus();
+    }
+
+    function insertTokenAtCursor(token) {
+      bodyEditor.focus();
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0 || !bodyEditor.contains(selection.anchorNode)) {
+        bodyEditor.appendChild(document.createTextNode(` ${token} `));
+        updatePreview();
+        return;
+      }
+      const range = selection.getRangeAt(0);
+      range.deleteContents();
+      const textNode = document.createTextNode(token);
+      range.insertNode(textNode);
+      range.setStartAfter(textNode);
+      range.setEndAfter(textNode);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      updatePreview();
+    }
+
+    function buildPlaceholderMap() {
+      const patient = currentPatient || {};
+      const map = { '[Date]': formatDateDisplay(new Date().toISOString()) };
+      if (patientLoaded) {
+        if (patient.childName || patient.firstName) map['[PatientName]'] = getPatientName(patient);
+        if (patient.parentName) map['[Guardian]'] = patient.parentName;
+        if (patient.dob) {
+          map['[DOB]'] = formatDateDisplay(patient.dob);
+          map['[Age]'] = calculateAge(patient.dob);
+        }
+        if (patient.gender) map['[Gender]'] = patient.gender;
+      }
+      return map;
+    }
+
+    function substitutePlaceholders(html) {
+      const map = buildPlaceholderMap();
+      let result = html;
+      Object.entries(map).forEach(([token, value]) => {
+        if (!value) return;
+        result = result.split(token).join(escapeHtml(value));
+      });
+      return result;
+    }
+
+    function fillPatientInfo() {
+      bodyEditor.innerHTML = substitutePlaceholders(bodyEditor.innerHTML);
+      updatePreview();
+    }
+
+    function updatePreview() {
+      certSheetTitle.textContent = certTitleInput.value.trim() || 'Untitled Certificate';
+      certSheetBody.innerHTML = substitutePlaceholders(bodyEditor.innerHTML);
+      certFooterDate.textContent = formatDateDisplay(new Date().toISOString());
+      updatePreviewScale();
+    }
+
+    function updatePreviewScale() {
+      const sheet = document.getElementById('cert-sheet');
+      if (!sheet || !previewOuter || !certSheetClip || !certSheetScale) return;
+      const availableWidth = previewOuter.clientWidth - 36;
+      const scale = availableWidth > 0 ? Math.min(1, availableWidth / sheet.offsetWidth) : 1;
+      certSheetScale.style.width = `${sheet.offsetWidth}px`;
+      certSheetScale.style.height = `${sheet.offsetHeight}px`;
+      certSheetScale.style.transform = `scale(${scale})`;
+      certSheetClip.style.width = `${sheet.offsetWidth * scale}px`;
+      certSheetClip.style.height = `${sheet.offsetHeight * scale}px`;
+    }
+
+    function switchTab(tabName) {
+      const isEdit = tabName === 'edit';
+      editPanel.classList.toggle('is-active-panel', isEdit);
+      previewPanel.classList.toggle('is-active-panel', !isEdit);
+      tabEditBtn.classList.toggle('is-active', isEdit);
+      tabPreviewBtn.classList.toggle('is-active', !isEdit);
+      if (!isEdit) updatePreviewScale();
+    }
+
+    async function saveCustomTemplate() {
+      if (!db) {
+        alert('Cloud records are not configured.');
+        return;
+      }
+      const title = certTitleInput.value.trim();
+      if (!title) {
+        alert('Add a title before saving this certificate template.');
+        return;
+      }
+      saveCustomTemplateBtn.disabled = true;
+      try {
+        const existing = templates.find((tpl) => tpl.id === selectedTemplateId);
+        const payload = {
+          title,
+          body: bodyEditor.innerHTML,
+          category: existing?.category === 'preset' ? 'preset' : 'custom',
+          updatedAt: serverTimestamp()
+        };
+        if (!isBlankDraft && selectedTemplateId) {
+          await setDoc(doc(db, FIREBASE_COLLECTIONS.certificates, selectedTemplateId), payload, { merge: true });
+        } else {
+          const created = await addDoc(collection(db, FIREBASE_COLLECTIONS.certificates), {
+            ...payload,
+            category: 'custom',
+            createdAt: serverTimestamp()
+          });
+          selectedTemplateId = created.id;
+          isBlankDraft = false;
+        }
+        await loadTemplates();
+        deleteCustomTemplateBtn.hidden = false;
+        renderLibrary();
+        statusNote.textContent = 'Certificate template saved to your library.';
+        statusNote.className = 'ready';
+      } catch (error) {
+        alert(`Unable to save template: ${error.message}`);
+      } finally {
+        saveCustomTemplateBtn.disabled = false;
+      }
+    }
+
+    async function deleteCustomTemplate() {
+      if (isBlankDraft || !selectedTemplateId || !db) return;
+      if (!confirm('Delete this certificate template from your library?')) return;
+      try {
+        await deleteDoc(doc(db, FIREBASE_COLLECTIONS.certificates, selectedTemplateId));
+        await loadTemplates();
+        renderLibrary();
+        if (templates.length) {
+          selectTemplate(templates[0].id);
+        } else {
+          selectBlankTemplate();
+        }
+      } catch (error) {
+        alert(`Unable to delete template: ${error.message}`);
+      }
+    }
+
+    function renderHistoryRecords(records, showPatientName) {
+      if (!records.length) {
+        historyList.innerHTML = '<div class="history-empty">No certificates generated yet.</div>';
+        return;
+      }
+      historyList.innerHTML = records.map((record) => `
+        <div class="history-row">
+          <div>
+            <strong>${escapeHtml(record.title || 'Certificate')}${showPatientName && record.childName ? ` &middot; ${escapeHtml(record.childName)}` : ''}</strong>
+            <span>${escapeHtml(record.createdAtDisplay || '')}</span>
+          </div>
+          ${record.downloadURL ? `<a class="history-view-link" href="pdf-viewer.html?url=${encodeURIComponent(record.downloadURL)}" target="_blank" rel="noopener noreferrer">View</a>` : ''}
+        </div>
+      `).join('');
+    }
+
+    async function loadHistory(patientId) {
+      historyPanelTitle.textContent = 'Generated For This Patient';
+      historyList.innerHTML = '<div class="history-empty">Loading history...</div>';
+      if (!db || !patientId) {
+        historyList.innerHTML = '<div class="history-empty">No certificates generated yet.</div>';
+        return;
+      }
+      try {
+        const snapshot = await getDocs(query(
+          collection(db, FIREBASE_COLLECTIONS.certificateHistory),
+          where('patientId', '==', patientId)
+        ));
+        const records = snapshot.docs
+          .map((docSnap) => docSnap.data())
+          .sort((a, b) => String(b.createdAtIso || '').localeCompare(String(a.createdAtIso || '')));
+        renderHistoryRecords(records, false);
+      } catch (error) {
+        historyList.innerHTML = `<div class="history-empty">Unable to load history: ${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    async function loadRecentCertificates() {
+      historyPanelTitle.textContent = 'Recently Generated Certificates';
+      historyList.innerHTML = '<div class="history-empty">Loading recent certificates...</div>';
+      if (!db) {
+        historyList.innerHTML = '<div class="history-empty">Cloud records are not configured.</div>';
+        return;
+      }
+      try {
+        const snapshot = await getDocs(query(
+          collection(db, FIREBASE_COLLECTIONS.certificateHistory),
+          orderBy('createdAt', 'desc'),
+          limit(20)
+        ));
+        renderHistoryRecords(snapshot.docs.map((docSnap) => docSnap.data()), true);
+      } catch (error) {
+        historyList.innerHTML = `<div class="history-empty">Unable to load certificates: ${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    function normalizeWhatsAppPhone(phone) {
+      const digits = String(phone || '').replace(/\D/g, '');
+      if (digits.length === 10) return `91${digits}`;
+      return digits;
+    }
+
+    function openWhatsAppChat(phone, message) {
+      const normalizedPhone = normalizeWhatsAppPhone(phone);
+      const encodedMessage = encodeURIComponent(message);
+      const targetUrl = normalizedPhone
+        ? `https://wa.me/${normalizedPhone}?text=${encodedMessage}`
+        : `https://wa.me/?text=${encodedMessage}`;
+      window.open(targetUrl, '_blank', 'noopener,noreferrer');
+    }
+
+    async function buildAndSaveCertificate() {
+      const patientId = currentPatient?.patientId;
+      if (!patientId || !db || !storage) {
+        throw new Error('Select a valid patient and ensure cloud storage is configured before saving.');
+      }
+      const title = certTitleInput.value.trim() || 'Certificate';
+
+      updatePreview();
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      const html2canvasModule = await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/+esm');
+      const { jsPDF } = await import('https://cdn.jsdelivr.net/npm/jspdf@3.0.3/+esm');
+      const html2canvas = html2canvasModule.default;
+
+      const sheet = document.getElementById('cert-sheet');
+      const scale = Math.max(2, Math.min(window.devicePixelRatio || 1, 3));
+      const canvas = await html2canvas(sheet, {
+        backgroundColor: '#ffffff',
+        scale,
+        useCORS: true,
+        logging: false
+      });
+
+      const PX_TO_MM = 25.4 / 96;
+      const pageWidthMm = sheet.offsetWidth * PX_TO_MM;
+      const pageHeightMm = sheet.offsetHeight * PX_TO_MM;
+      const pdf = new jsPDF({
+        orientation: pageHeightMm >= pageWidthMm ? 'portrait' : 'landscape',
+        unit: 'mm',
+        format: [pageWidthMm, pageHeightMm]
+      });
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, pageWidthMm, pageHeightMm, undefined, 'FAST');
+
+      const pdfBlob = pdf.output('blob');
+      const certId = window.crypto?.randomUUID ? `cert-${patientId}-${window.crypto.randomUUID()}` : `cert-${patientId}-${Date.now()}`;
+      const fileName = `${title.replace(/[^a-z0-9]+/gi, '-')}-${certId}.pdf`;
+      const storagePath = `${CLINIC_STORAGE_PREFIX}/certificates/${patientId}/${fileName}`;
+      const storageRef = ref(storage, storagePath);
+      await uploadBytes(storageRef, pdfBlob, { contentType: 'application/pdf', contentDisposition: 'inline' });
+      const downloadURL = await getDownloadURL(storageRef);
+
+      const record = {
+        certificateSaveId: certId,
+        patientId,
+        childName: getPatientName(currentPatient) || '',
+        title,
+        fileName,
+        storagePath,
+        downloadURL,
+        source: 'certificate-pdf',
+        type: 'certificate',
+        createdAt: serverTimestamp(),
+        createdAtIso: new Date().toISOString(),
+        createdAtDisplay: new Date().toLocaleString('en-IN')
+      };
+      await setDoc(doc(db, FIREBASE_COLLECTIONS.certificateHistory, certId), record);
+      await loadHistory(patientId);
+
+      return { pdf, fileName, title, downloadURL, patientId };
+    }
+
+    async function handleSavePdf() {
+      generateBtn.disabled = true;
+      generateBtn.textContent = 'Generating...';
+      try {
+        const result = await buildAndSaveCertificate();
+        result.pdf.save(result.fileName);
+        statusNote.textContent = 'Certificate saved to patient record and downloaded.';
+        statusNote.className = 'ready';
+      } catch (error) {
+        alert(`Unable to generate certificate: ${error.message}`);
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = 'Save PDF To Patient Record';
+      }
+    }
+
+    async function handlePrint() {
+      printBtn.disabled = true;
+      printBtn.textContent = 'Preparing...';
+      try {
+        await buildAndSaveCertificate();
+        window.print();
+        statusNote.textContent = 'Certificate saved to patient record.';
+        statusNote.className = 'ready';
+      } catch (error) {
+        alert(`Unable to print certificate: ${error.message}`);
+      } finally {
+        printBtn.disabled = false;
+        printBtn.textContent = 'Print';
+      }
+    }
+
+    async function handleWhatsApp() {
+      whatsappBtn.disabled = true;
+      whatsappBtn.textContent = 'Opening...';
+      try {
+        const result = await buildAndSaveCertificate();
+        const message = [
+          `Hello ${getPatientName(currentPatient) || 'Patient'},`,
+          '',
+          `Here is your ${result.title}:`,
+          result.downloadURL,
+          '',
+          `Clinic: ${branding.clinicTitle || DEFAULT_BRANDING.clinicTitle}`,
+          '',
+          `Regards,`,
+          branding.doctorName || DEFAULT_BRANDING.doctorName
+        ].join('\n');
+        openWhatsAppChat(currentPatient?.mobileNumber || '', message);
+        statusNote.textContent = 'Certificate saved to patient record and WhatsApp opened.';
+        statusNote.className = 'ready';
+      } catch (error) {
+        alert(`Unable to prepare WhatsApp message: ${error.message}`);
+      } finally {
+        whatsappBtn.disabled = false;
+        whatsappBtn.textContent = 'WhatsApp';
+      }
+    }
+
+    document.querySelectorAll('.placeholder-chip').forEach((btn) => {
+      btn.addEventListener('click', () => insertTokenAtCursor(btn.dataset.token));
+    });
+
+    certTitleInput.addEventListener('input', updatePreview);
+    bodyEditor.addEventListener('input', updatePreview);
+    fillPatientInfoBtn.addEventListener('click', fillPatientInfo);
+    saveCustomTemplateBtn.addEventListener('click', saveCustomTemplate);
+    deleteCustomTemplateBtn.addEventListener('click', deleteCustomTemplate);
+    printBtn.addEventListener('click', handlePrint);
+    whatsappBtn.addEventListener('click', handleWhatsApp);
+    generateBtn.addEventListener('click', handleSavePdf);
+    tabEditBtn.addEventListener('click', () => switchTab('edit'));
+    tabPreviewBtn.addEventListener('click', () => switchTab('preview'));
+    window.addEventListener('resize', updatePreviewScale);
+    librarySelect.addEventListener('change', () => {
+      if (librarySelect.value === '__new__') {
+        selectBlankTemplate();
+      } else {
+        selectTemplate(librarySelect.value);
+      }
+    });
+
+    async function init() {
+      await Promise.all([
+        loadBranding(),
+        loadTemplates(),
+        patientIdParam ? loadPatient(patientIdParam) : loadRecentCertificates()
+      ]);
+      renderLibrary();
+      if (templates.length) {
+        selectTemplate(templates[0].id);
+      } else {
+        selectBlankTemplate();
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

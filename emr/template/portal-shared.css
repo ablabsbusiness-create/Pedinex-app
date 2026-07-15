@@ -1,0 +1,57 @@
+/* Shared across emr/kid/portal.html and emr/lungs/portal.html.
+   Relies on --ink, --line, --brand, --brand-soft, --brand-strong custom
+   properties already defined by each portal's own stylesheet. */
+
+.phone-input-group {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.phone-input-prefix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid transparent;
+  background: linear-gradient(135deg, var(--brand-soft), #cdf3d8);
+  color: var(--brand-strong);
+  font-weight: 800;
+  font-size: 15.5px;
+}
+
+.phone-input-group input {
+  flex: 1;
+  min-width: 0;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ink);
+  -webkit-box-shadow: 0 0 0 1000px #fbfdfb inset;
+  box-shadow: 0 0 0 1000px #fbfdfb inset;
+  caret-color: var(--ink);
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* kid/mobile-app.css forces a 44px tap-target min-height on every
+   <button>, which also blows up these tiny carousel dot buttons. */
+.illustration-dots .dot {
+  min-height: 0 !important;
+  min-width: 0 !important;
+}
+
+/* .page-shell's "margin: auto 0" is meant to vertically center the
+   login card on phones, but auto margins only resolve outside normal
+   block flow — .auth-layout needs to actually be a flex column that
+   grows to fill the body for that centering to take effect. */
+@media (max-width: 760px) {
+  .auth-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+  }
+}
