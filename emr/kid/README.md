@@ -1,162 +1,165 @@
-# EMR Template
+# PediaNex EMR (emr/kid)
 
-A reusable, standalone pediatric-style clinic EMR: patient portal with phone
-OTP login, growth charts (WHO / IAP standards), prescriptions, vaccination
-records, and printable certificates. It runs on Vite (static frontend) plus a
-handful of Vercel serverless functions, backed by Firebase (Firestore +
-Storage) and MSG91 (patient portal OTP).
+This is the live, deployed clinic EMR for **PediaNex** — a Vite static
+frontend plus Vercel serverless functions, backed by its own isolated
+Firebase project (Firestore + Storage) and MSG91 (patient portal phone OTP).
 
-This copy still contains `__TOKEN__` placeholders instead of real clinic
-branding. Follow the steps below in order to turn it into a working clinic
-deployment.
+- **Live URL:** <https://pedinex-app.vercel.app>
+- **GitHub repo:** `ablabsbusiness-create/Pedinex-app` (public), branch `main`
+- **Vercel project:** `pedinex-app` (team `ablabsbusiness-1207s-projects`),
+  Root Directory = `emr/kid`
+- **Firebase project:** isolated project ("PediaNex-Trial" at time of
+  writing) — **not** shared with any other clinic's data
 
-## 1. Copy this folder
+This app was originally copied from `emr/template` (the reusable base for
+onboarding new clinics — see `../template/README.md`). Everything below
+documents this specific deployment's setup and the tooling added on top.
 
-Copy this `template` folder to its own location — either a new folder in this
-same repo (e.g. `emr/<new-clinic-slug>`) or push it out as its own standalone
-project/repo. Do this before running `npm install`, so `node_modules` isn't
-duplicated into the copy.
+## Clinic branding — one file to edit
 
-## 2. Install dependencies
+Branding text across every page (`__CLINIC_NAME__`, `__DOCTOR_NAME__`, etc.)
+is filled in from a single file: **`clinic-branding.env`**.
 
-```bash
-npm install
-```
+1. Edit `clinic-branding.env` (plain `KEY=value` lines — `CLINIC_NAME`,
+   `CLINIC_SHORT_NAME`, `DOCTOR_NAME`, `CLINIC_PHONE`, `CLINIC_ADDRESS`,
+   `CLINIC_EMAIL`, `CLINIC_DOMAIN`, `WHATSAPP_NUMBER`).
+2. Run `node scripts/apply-branding.js` — or just double-click
+   **`PediaNex - App apply-branding.bat`** on the Desktop, which does the
+   same thing from this folder. It's safe to re-run any time; it only
+   touches files that still contain a `__TOKEN__` placeholder for a value
+   you've now filled in.
+3. Commit, push, and let Vercel redeploy for it to go live.
 
-## 3. Fill in clinic branding
+`CLINIC_SHORT_NAME` is also used as the Firestore/Storage namespace
+(`clinics/<short-name>/...`) and the patient-ID prefix — if you ever change
+it, you also need to update `firebase/firestore.rules` and
+`firebase/storage.rules` (see below) and republish them, since those are
+scoped to the specific short name currently in use, not read dynamically
+from `clinic-branding.env`.
 
-```bash
-npm run setup
-```
+## Firestore & Storage security rules
 
-This prompts for the clinic name, short code (used as the patient-ID prefix,
-e.g. `SPC0001`), doctor name, phone, address, email, domain, and WhatsApp
-number, then replaces every `__TOKEN__` placeholder across the project with
-your answers. You can re-run it any time to catch anything you left blank.
+Rules live in `firebase/firestore.rules` and `firebase/storage.rules`,
+scoped to whatever `CLINIC_SHORT_NAME` this app currently uses (`clinics/kid`
+at time of writing — the app's internal namespace, independent of the
+`CLINIC_SHORT_NAME` used for the patient-ID prefix). They allow read/write
+within that namespace and deny everything else — the same "open within
+namespace" model production clinics use elsewhere in this org.
 
-## 4. Create a Firebase project
+**These files are not deployed automatically.** To publish them to Firebase:
 
-1. Go to <https://console.firebase.google.com> and create a new project.
-2. Enable **Authentication** — the clinic-staff login itself is a simple
-   shared-password session (see step 5), so you don't need to configure a
-   Firebase Auth provider unless you plan to extend the app; enabling the
-   Authentication product in the console is still recommended so Firestore
-   security rules and other Firebase tooling behave as expected.
-3. Enable **Firestore Database** (Native mode, choose a region close to your
-   clinic). This stores patients, prescriptions, vaccination records, and
-   certificates.
-4. Enable **Storage**. This stores prescription and certificate PDFs.
-5. Register a **Web app** (Project settings > General > Your apps > Web) and
-   copy the `firebaseConfig` values shown — you'll need these in step 5.
-6. Generate a **service account key** (Project settings > Service accounts >
-   Generate new private key) — the serverless API routes in `/api` use the
-   Firebase Admin SDK to create patients and this key is how they
-   authenticate. Keep this file secret; never commit it.
+- Double-click **`PediaNex - App deploy-rules.bat`** on the Desktop. First
+  run opens Firebase's interactive project picker (`firebase use --add`) so
+  you select the right Firebase project — after that, every run deploys
+  straight away. Requires being logged into the Firebase account that owns
+  the project (it'll prompt a browser login the first time).
+- Or manually: Firebase Console → your project → **Firestore Database →
+  Rules** → paste `firebase/firestore.rules` → Publish, then **Storage →
+  Rules** → paste `firebase/storage.rules` → Publish.
 
-## 5. Create your `.env` file
+Without published rules, the app fails with `Missing or insufficient
+permissions` when loading patient records — this already happened once
+during setup and was traced to the wrong (template) rules being pasted in
+by mistake, see "Known issues already fixed" below.
 
-```bash
-cp .env.example .env
-```
+⚠️ **Do not paste `emr/template/firebase/*.rules`** into this project's
+Firebase console — those use the literal placeholder
+`clinics/__CLINIC_SHORT_NAME__`, which will never match anything and denies
+all access. Always use the rules in **this** folder's `firebase/` directory.
 
-Fill in:
+## Environment variables (set in Vercel, not committed)
 
-- All `VITE_FIREBASE_*` values from the web app config in step 4.5.
-- `FIREBASE_PROJECT_ID` / `FIREBASE_STORAGE_BUCKET` — same project as above.
-- `FIREBASE_SERVICE_ACCOUNT_KEY` — paste the service account JSON from step
-  4.6 (either the raw JSON on one line, or base64-encode it first).
-- `CLINIC_ACCESS_PASSWORD` — the shared password your clinic staff will use
-  to log in to the EMR. Pick a real value.
-- `CLINIC_SESSION_SECRET` and `PATIENT_SESSION_SECRET` — long random secrets
-  used to sign the staff and patient-portal session cookies. Generate each
-  with:
+This repo is **public**, so no real secrets live in this README or in any
+committed `.env` file — only `.env.example` / `.env.vercel.example` are
+checked in. The actual values are set in Vercel → Project Settings →
+Environment Variables:
 
+- `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`,
+  `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`,
+  `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`,
+  `VITE_FIREBASE_MEASUREMENT_ID` — from the Firebase web app config.
+- `FIREBASE_PROJECT_ID`, `FIREBASE_STORAGE_BUCKET`,
+  `FIREBASE_SERVICE_ACCOUNT_KEY` — used server-side by `/api` routes via the
+  Firebase Admin SDK.
+- `CLINIC_ACCESS_PASSWORD` — the staff login password for `/password`.
+- `CLINIC_SESSION_SECRET`, `PATIENT_SESSION_SECRET` — long random secrets
+  signing the staff and patient session cookies. Generate with:
   ```bash
   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
   ```
+- `VITE_MSG91_WIDGET_ID`, `VITE_MSG91_TOKEN_AUTH`, `MSG91_AUTH_KEY` — only if
+  the patient portal's phone-OTP login (MSG91, not Firebase phone auth) is
+  in use.
 
-  Run it twice and use a different value for each secret.
+For local dev, copy `.env.example` to `.env` and fill in the same values.
 
-## 6. Set up MSG91 (patient portal phone OTP login)
-
-The patient portal (`portal.html`) authenticates parents with a phone-number
-OTP, verified through MSG91's widget flow (not Firebase phone auth).
-
-1. Sign up at <https://msg91.com> and verify a sender ID.
-2. In the MSG91 dashboard, go to **OTP > Widgets** and create a new OTP
-   widget (SMS channel, 4-digit code). Note the **Widget ID** and
-   **Token Auth** values shown for the widget.
-3. Go to **API > Auth Key** and copy your account's **Auth Key**.
-4. Add these to your `.env`:
-   - `VITE_MSG91_WIDGET_ID` — the widget ID from step 2.
-   - `VITE_MSG91_TOKEN_AUTH` — the token auth value from step 2.
-   - `MSG91_AUTH_KEY` — the auth key from step 3 (used server-side in
-     `/api/otp/[action].js` to verify the OTP token — keep this secret, do
-     not prefix it with `VITE_`).
-
-If you don't need the patient portal, you can skip this section — the rest
-of the EMR (staff login, patients, prescriptions, growth charts, vaccination,
-certificates) does not depend on MSG91.
-
-## 7. Local development
+## Local development
 
 ```bash
+npm install
 npm run dev
 ```
 
-This starts Vite at `http://localhost:5173`. Note: the staff login
-(`/api/auth/login`, `/api/auth/logout`) is emulated by a Vite dev-server
-plugin (see `vite.config.js`) and works out of the box. The other API routes
-under `/api/otp` and `/api/patients` are Vercel serverless functions and only
-run when served by Vercel — use `vercel dev` (from the Vercel CLI) instead of
-`vite dev` if you need to exercise the patient portal OTP flow or the
-"create/next patient ID" endpoints locally.
+Starts Vite at `http://localhost:5173`. The staff login (`/api/auth/login`,
+`/api/auth/logout`) is emulated by a Vite dev-server plugin and works out of
+the box. `/api/otp` and `/api/patients` are real Vercel serverless functions
+and only run when served by Vercel — use `vercel dev` instead of `vite dev`
+if you need to exercise the OTP flow or patient-ID allocation locally.
 
-## 8. Deploy to Vercel
+## Deploying
 
-1. Push this folder to a Git repository (or use the Vercel CLI directly).
-2. Create a new Vercel project and import the repository.
-3. In the project's **Settings > General**, set **Root Directory** to the
-   path of this folder (e.g. `emr/<new-clinic-slug>`).
-4. In **Settings > Environment Variables**, add every variable from your
-   `.env` file (all the `VITE_FIREBASE_*` values, `FIREBASE_PROJECT_ID`,
-   `FIREBASE_STORAGE_BUCKET`, `FIREBASE_SERVICE_ACCOUNT_KEY`,
-   `CLINIC_ACCESS_PASSWORD`, `CLINIC_SESSION_SECRET`,
-   `PATIENT_SESSION_SECRET`, and the MSG91 variables if you're using the
-   patient portal).
-5. Build command: `npm run build`. Output directory: `dist`. (Both are also
-   already set in `vercel.json`.)
-6. Deploy.
+Push to `main` on GitHub — Vercel auto-deploys from there (Root Directory
+`emr/kid`, build command `npm run build`, output directory `dist`, all
+already set in `vercel.json` / Vercel project settings).
 
-## 9. Post-deploy checklist
+Desktop `.bat` shortcuts for this repo:
 
-After the first deploy, verify:
+- **`PediaNex - App push.bat`** — commits and pushes the whole repo.
+- **`PediaNex - App apply-branding.bat`** — applies `clinic-branding.env`
+  (see above).
+- **`PediaNex - App deploy-rules.bat`** — publishes the Firestore/Storage
+  rules (see above).
+
+## Post-deploy checklist
 
 - [ ] Staff login at `/password` works with `CLINIC_ACCESS_PASSWORD`.
+- [ ] Patient records load on `/search` without a "Missing or insufficient
+      permissions" error (confirms Firestore rules are published correctly).
 - [ ] Patient portal login at `/portal` sends and verifies an OTP (if MSG91
       is configured).
-- [ ] Add a test patient from `/new-patient` and confirm it gets a patient ID
-      with your clinic's short-name prefix.
-- [ ] Generate a prescription and download/print the PDF from
-      `/prescription-growth-chart-dashboard`.
-- [ ] Generate a certificate PDF from `/certificates`.
+- [ ] Add a test patient from `/new-patient` and confirm the patient ID uses
+      the right prefix.
+- [ ] Generate a prescription PDF from `/prescription-growth-chart-dashboard`
+      and a certificate PDF from `/certificates`.
 - [ ] Growth chart rendering (WHO / IAP curves) displays correctly for a test
       patient with a couple of measurements.
+- [ ] No page still shows a raw `__TOKEN__` placeholder (check `/password`,
+      `/search`, `/settings` at minimum).
 
-## Notes on what's in this template
+## Known issues already fixed (for reference)
 
-- `/api` contains the serverless functions for staff auth, patient-portal
-  OTP auth, and patient creation/ID allocation. `lib/` contains the shared
-  session and Firebase-init helpers used by both the frontend and the API
-  routes.
-- `scripts/setup-template.js` is the branding script from step 3.
-  `scripts/ensure-iap-assets.mjs` and `scripts/render_growth_charts.py` are
-  used at build/dev time to prepare growth chart assets — leave these as-is.
-- The original copy of this app (`emr/kid`) shipped with a set of one-off
-  data-migration scripts (CSV import, legacy ID reassignment, dedupe, etc.)
-  tied to that clinic's existing patient data and production Firebase
-  project. Those were intentionally left out of this template since they
-  don't apply to a fresh deployment; if you're migrating existing patient
-  data from another system, you'll need to write your own import script
-  against this app's Firestore schema (see `new-patient.html` and
-  `api/patients/create.js` for the patient record shape).
+- **Middleware build failure** — `middleware.js`'s `config.matcher` had an
+  empty string as its first entry instead of `/` (Vercel requires every
+  matcher value to start with `/`). Fixed.
+- **Raw `__CLINIC_NAME__` text in production** — this app was copied from
+  `emr/template` without running the branding step first, so it briefly
+  shipped with unfilled placeholders visible to real users. Fixed via the
+  `clinic-branding.env` workflow above.
+- **"Missing or insufficient permissions" loading patients** — the
+  Firestore/Storage rules pasted into the Firebase console were the
+  *template's* rules (`clinics/__CLINIC_SHORT_NAME__`, a literal, never-
+  matching path) instead of this app's own rules (`clinics/kid`). Fixed by
+  publishing the rules from this folder's `firebase/` directory instead.
+
+## What's in this folder
+
+- `/api` — serverless functions for staff auth, patient-portal OTP auth,
+  and patient creation/ID allocation.
+- `lib/` — shared session and Firebase-init helpers used by both the
+  frontend and the API routes.
+- `firebase/` — Firestore/Storage security rules for this deployment (see
+  above). `firebase.json` points the Firebase CLI at them.
+- `clinic-branding.env` / `clinic-branding.env.example` — the single-file
+  branding config (see above). `scripts/apply-branding.js` applies it.
+- `scripts/ensure-iap-assets.mjs`, `scripts/render_growth_charts.py` — used
+  at build/dev time to prepare growth chart assets; leave as-is.
