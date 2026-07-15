@@ -8,13 +8,13 @@ import { getStorage } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-s
 import { getAuth } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAm-cUFMyTFSyw8KlFOCcBKQkTKApEr5oo',
-  authDomain: 'clinci-dr-gunda.firebaseapp.com',
-  projectId: 'clinci-dr-gunda',
-  storageBucket: 'clinci-dr-gunda.firebasestorage.app',
-  messagingSenderId: '1059959825609',
-  appId: '1:1059959825609:web:8201599754706ac4661918',
-  measurementId: 'G-4V5JMVW45E'
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 const isFileProtocol = typeof window !== 'undefined' && window.location.protocol === 'file:';

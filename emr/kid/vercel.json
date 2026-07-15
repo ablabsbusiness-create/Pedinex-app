@@ -1,13 +1,21 @@
 {
-  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/emr/kid",
-      "destination": "/index"
+      "destination": "/index.html"
     },
     {
-      "source": "/emr/kid/:path*",
-      "destination": "/:path*"
+      "source": "/emr/kid/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/emr/kid/(.*)\\.(.*)",
+      "destination": "/$1.$2"
+    },
+    {
+      "source": "/emr/kid/(.*)",
+      "destination": "/$1.html"
     }
   ]
 }
