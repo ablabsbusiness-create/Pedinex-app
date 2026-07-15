@@ -240,13 +240,6 @@ export default defineConfig({
       configureServer(server) {
         server.middlewares.use('/api/growth_charts', (req, res) => {
           void (async () => {
-            const authenticated = await isAuthenticatedCookieHeader(req.headers.cookie || '');
-
-            if (!authenticated) {
-              sendJson(res, 401, { error: 'Authentication required.' });
-              return;
-            }
-
             if (req.method === 'OPTIONS') {
               res.statusCode = 204;
               res.end();

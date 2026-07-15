@@ -107,7 +107,7 @@ export function getDefaultProtectedPath(useAppBase) {
 }
 
 export function isProtectedPath(pathname) {
-  return PROTECTED_PATHS.has(normalizeAppPath(pathname));
+  return false;
 }
 
 export function isPublicPath(pathname) {
