@@ -87,50 +87,17 @@ function readRequestBody(req) {
   });
 }
 
-function cleanUrlsMiddleware(root, base) {
-  return (req, res, next) => {
-    const requestUrl = new URL(req.url || '/', 'http://localhost');
-    let pathname = requestUrl.pathname;
-
-    if (base && pathname.startsWith(base)) {
-      pathname = pathname.slice(base.length - 1);
-    }
-
-    if (pathname.endsWith('.html') || pathname.endsWith('/') || pathname.includes('.')) {
-      next();
-      return;
-    }
-
-    const candidate = resolve(root, `.${pathname}.html`);
-
-    if (existsSync(candidate)) {
-      req.url = `${base.slice(0, -1)}${pathname}.html${requestUrl.search}`;
-    }
-
-    next();
-  };
-}
-
 export default defineConfig({
   root: __dirname,
   envDir: __dirname,
   publicDir: resolve(__dirname, 'public'),
-  base: '/emr/kid/',
+  base: '/',
   resolve: {
     alias: {
       jspdf: resolve(nodeModulesRoot, 'node_modules/jspdf/dist/jspdf.es.min.js')
     }
   },
   plugins: [
-    {
-      name: 'clean-urls',
-      configureServer(server) {
-        server.middlewares.use(cleanUrlsMiddleware(__dirname, '/emr/kid/'));
-      },
-      configurePreviewServer(server) {
-        server.middlewares.use(cleanUrlsMiddleware(__dirname, '/emr/kid/'));
-      }
-    },
     {
       name: 'copy-growth-chart-assets',
       closeBundle() {
@@ -162,7 +129,7 @@ export default defineConfig({
             const normalizedPath = normalizeAppPath(requestUrl.pathname);
             const authenticated = await isAuthenticatedCookieHeader(req.headers.cookie || '');
 
-            if (normalizedPath === '/api/kid/auth/login') {
+            if (normalizedPath === '/api/auth/login') {
               if (req.method !== 'POST') {
                 sendJson(res, 405, { error: 'Method not allowed.' });
                 return;
@@ -197,7 +164,7 @@ export default defineConfig({
               return;
             }
 
-            if (normalizedPath === '/api/kid/auth/logout') {
+            if (normalizedPath === '/api/auth/logout') {
               if (req.method !== 'POST') {
                 sendJson(res, 405, { error: 'Method not allowed.' });
                 return;
@@ -240,6 +207,13 @@ export default defineConfig({
       configureServer(server) {
         server.middlewares.use('/api/growth_charts', (req, res) => {
           void (async () => {
+            const authenticated = await isAuthenticatedCookieHeader(req.headers.cookie || '');
+
+            if (!authenticated) {
+              sendJson(res, 401, { error: 'Authentication required.' });
+              return;
+            }
+
             if (req.method === 'OPTIONS') {
               res.statusCode = 204;
               res.end();

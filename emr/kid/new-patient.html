@@ -4,44 +4,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>New Patient | The Better Kids Clinic EMR</title>
+  <title>New Patient | __CLINIC_NAME__ EMR</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="manifest" href="/emr/kid/site.webmanifest" />
-  <meta name="description" content="New Patient page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic." />
-  <link rel="canonical" href="https://www.thebetterhealth.clinic/emr/kid/new-patient" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="description" content="New Patient page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
+  <link rel="canonical" href="https://__CLINIC_DOMAIN__/new-patient" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The Better Health Clinic" />
-  <meta property="og:title" content="New Patient | The Better Kids Clinic EMR" />
-  <meta property="og:description" content="New Patient page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic." />
-  <meta property="og:url" content="https://www.thebetterhealth.clinic/emr/kid/new-patient" />
+  <meta property="og:site_name" content="__CLINIC_NAME__" />
+  <meta property="og:title" content="New Patient | __CLINIC_NAME__ EMR" />
+  <meta property="og:description" content="New Patient page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
+  <meta property="og:url" content="https://__CLINIC_DOMAIN__/new-patient" />
   <meta property="og:locale" content="en_IN" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="New Patient | The Better Kids Clinic EMR" />
-  <meta name="twitter:description" content="New Patient page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic." />
+  <meta name="twitter:title" content="New Patient | __CLINIC_NAME__ EMR" />
+  <meta name="twitter:description" content="New Patient page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://www.thebetterhealth.clinic/#website",
-      "name": "The Better Health Clinic",
-      "url": "https://www.thebetterhealth.clinic/"
+      "@id": "https://__CLINIC_DOMAIN__/#website",
+      "name": "__CLINIC_NAME__",
+      "url": "https://__CLINIC_DOMAIN__/"
     },
     {
       "@type": "MedicalClinic",
-      "@id": "https://www.thebetterhealth.clinic/#clinic",
-      "name": "The Better Health Clinic",
-      "url": "https://www.thebetterhealth.clinic/",
+      "@id": "https://__CLINIC_DOMAIN__/#clinic",
+      "name": "__CLINIC_NAME__",
+      "url": "https://__CLINIC_DOMAIN__/",
       "telephone": [
-        "+919686183999",
-        "+919513988840"
+        "__CLINIC_PHONE__",
+        "__CLINIC_PHONE__"
       ],
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "#155, 2nd Cross, 1st stage, Arekere MICO Layout, Off Bannerghatta Road",
-        "addressLocality": "Bengaluru",
-        "postalCode": "560076",
+        "streetAddress": "__CLINIC_ADDRESS__",
+        "addressLocality": "",
+        "postalCode": "",
         "addressCountry": "IN"
       },
       "medicalSpecialty": [
@@ -51,15 +51,15 @@
     },
     {
       "@type": "WebPage",
-      "@id": "https://www.thebetterhealth.clinic/emr/kid/new-patient#webpage",
-      "url": "https://www.thebetterhealth.clinic/emr/kid/new-patient",
-      "name": "New Patient | The Better Kids Clinic EMR",
-      "description": "New Patient page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic.",
+      "@id": "https://__CLINIC_DOMAIN__/new-patient#webpage",
+      "url": "https://__CLINIC_DOMAIN__/new-patient",
+      "name": "New Patient | __CLINIC_NAME__ EMR",
+      "description": "New Patient page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__.",
       "isPartOf": {
-        "@id": "https://www.thebetterhealth.clinic/#website"
+        "@id": "https://__CLINIC_DOMAIN__/#website"
       },
       "about": {
-        "@id": "https://www.thebetterhealth.clinic/#clinic"
+        "@id": "https://__CLINIC_DOMAIN__/#clinic"
       }
     }
   ]
@@ -694,17 +694,17 @@
       <div class="brand">
         <div class="brand-mark">+</div>
         <div class="brand-copy">
-          <strong>The Better Health Clinic</strong>
+          <strong>__CLINIC_NAME__</strong>
           <span>New Patient</span>
         </div>
       </div>
 
       
       <nav id="primary-nav" class="nav-links" aria-label="Primary">
-        <a class="nav-link" href="/emr/kid/">Dashboard</a>
-        <a class="nav-link active" href="/emr/kid/search">Enter Clinic</a>
-        <a class="nav-link" href="/emr/kid/pending-approvals">Approvals</a>
-        <a class="nav-link" href="/emr/kid/settings">Settings</a>
+        <a class="nav-link" href="/">Dashboard</a>
+        <a class="nav-link active" href="/search">Enter Clinic</a>
+        <a class="nav-link" href="/pending-approvals">Approvals</a>
+        <a class="nav-link" href="/settings">Settings</a>
       </nav>
 
 
@@ -791,8 +791,8 @@
   <script type="module">
     import { doc, getDoc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
     import { db } from './lib/firebase-init.js';
-    const CLINIC_FIREBASE_NAMESPACE = import.meta.env.VITE_CLINIC_NAMESPACE || 'clinics/kid-pedinex-dev';
-    const PATIENT_ID_PREFIX = 'TBK';
+    const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
+    const PATIENT_ID_PREFIX = '__CLINIC_SHORT_NAME__';
     const PATIENT_ID_WIDTH = 4;
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
@@ -856,7 +856,7 @@
     }
 
     function isTbkPatientId(value) {
-      return /^TBK\d{4,}$/i.test(String(value || '').trim());
+      return /^__CLINIC_SHORT_NAME__\d{4,}$/i.test(String(value || '').trim());
     }
 
     function formatPatientId(serial) {
@@ -938,7 +938,7 @@
       patientIdOutput.textContent = 'Loading...';
 
       try {
-        const response = await fetch('/api/kid/patients/next-id', {
+        const response = await fetch('/api/patients/next-id', {
           method: 'GET',
           credentials: 'same-origin'
         });
@@ -968,7 +968,7 @@
 
     function redirectToLogin() {
       const nextPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-      window.location.href = `/emr/kid/password?next=${encodeURIComponent(nextPath)}`;
+      window.location.href = `/password?next=${encodeURIComponent(nextPath)}`;
     }
 
     function parseDobInput(dayValue, monthValue, yearValue) {
@@ -1106,7 +1106,7 @@
       let result = {};
 
       try {
-        const response = await fetch('/api/kid/patients/create', {
+        const response = await fetch('/api/patients/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -1130,7 +1130,7 @@
       }
 
       if (!isTbkPatientId(result.patientId)) {
-        throw new Error(`Unexpected patient ID "${result.patientId}". Kid patients must use TBK IDs.`);
+        throw new Error(`Unexpected patient ID "${result.patientId}". Kid patients must use __CLINIC_SHORT_NAME__ IDs.`);
       }
 
       const savedRecord = {
@@ -1186,7 +1186,7 @@
         patientIdOutput.textContent = patientId;
         setSaveStatus(`Patient details saved with ID ${patientId}.`, 'ready');
         console.log(`Saved with Patient ID ${patientId}.`);
-      window.location.href = `/emr/kid/prescription-growth-chart-dashboard?patientId=${encodeURIComponent(patientId)}`;
+      window.location.href = `/prescription-growth-chart-dashboard?patientId=${encodeURIComponent(patientId)}`;
       } catch (error) {
         console.error(`Cloud save failed: ${error.message}`);
         const message = error.message.endsWith('Please try again.')

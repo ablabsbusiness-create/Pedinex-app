@@ -4,26 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Patient Portal | The Better Kids Clinic EMR</title>
+  <title>Patient Portal | __CLINIC_NAME__ EMR</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="manifest" href="/emr/kid/portal.webmanifest" />
-  <link rel="apple-touch-icon" href="/emr/kid/icons/apple-touch-icon.png" />
+  <link rel="manifest" href="/portal.webmanifest" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
   <meta name="theme-color" content="#15803d" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Kids Portal" />
-  <meta name="description" content="Patient portal for The Better Kids Clinic, letting parents view and download their child's past prescriptions." />
-  <link rel="canonical" href="https://www.thebetterhealth.clinic/emr/kid/portal" />
+  <meta name="description" content="Patient portal for __CLINIC_NAME__, letting parents view and download their child's past prescriptions." />
+  <link rel="canonical" href="https://__CLINIC_DOMAIN__/portal" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The Better Health Clinic" />
-  <meta property="og:title" content="Patient Portal | The Better Kids Clinic EMR" />
-  <meta property="og:description" content="Patient portal for The Better Kids Clinic, letting parents view and download their child's past prescriptions." />
-  <meta property="og:url" content="https://www.thebetterhealth.clinic/emr/kid/portal" />
+  <meta property="og:site_name" content="__CLINIC_NAME__" />
+  <meta property="og:title" content="Patient Portal | __CLINIC_NAME__ EMR" />
+  <meta property="og:description" content="Patient portal for __CLINIC_NAME__, letting parents view and download their child's past prescriptions." />
+  <meta property="og:url" content="https://__CLINIC_DOMAIN__/portal" />
   <meta property="og:locale" content="en_IN" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Patient Portal | The Better Kids Clinic EMR" />
-  <meta name="twitter:description" content="Patient portal for The Better Kids Clinic, letting parents view and download their child's past prescriptions." />
+  <meta name="twitter:title" content="Patient Portal | __CLINIC_NAME__ EMR" />
+  <meta name="twitter:description" content="Patient portal for __CLINIC_NAME__, letting parents view and download their child's past prescriptions." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -33,24 +33,24 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://www.thebetterhealth.clinic/#website",
-      "name": "The Better Health Clinic",
-      "url": "https://www.thebetterhealth.clinic/"
+      "@id": "https://__CLINIC_DOMAIN__/#website",
+      "name": "__CLINIC_NAME__",
+      "url": "https://__CLINIC_DOMAIN__/"
     },
     {
       "@type": "MedicalClinic",
-      "@id": "https://www.thebetterhealth.clinic/#clinic",
-      "name": "The Better Health Clinic",
-      "url": "https://www.thebetterhealth.clinic/",
+      "@id": "https://__CLINIC_DOMAIN__/#clinic",
+      "name": "__CLINIC_NAME__",
+      "url": "https://__CLINIC_DOMAIN__/",
       "telephone": [
-        "+919686183999",
-        "+919513988840"
+        "__CLINIC_PHONE__",
+        "__CLINIC_PHONE__"
       ],
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "#155, 2nd Cross, 1st stage, Arekere MICO Layout, Off Bannerghatta Road",
-        "addressLocality": "Bengaluru",
-        "postalCode": "560076",
+        "streetAddress": "__CLINIC_ADDRESS__",
+        "addressLocality": "",
+        "postalCode": "",
         "addressCountry": "IN"
       },
       "medicalSpecialty": [
@@ -60,15 +60,15 @@
     },
     {
       "@type": "WebPage",
-      "@id": "https://www.thebetterhealth.clinic/emr/kid/portal#webpage",
-      "url": "https://www.thebetterhealth.clinic/emr/kid/portal",
-      "name": "Patient Portal | The Better Kids Clinic EMR",
-      "description": "Patient portal for The Better Kids Clinic, letting parents view and download their child's past prescriptions.",
+      "@id": "https://__CLINIC_DOMAIN__/portal#webpage",
+      "url": "https://__CLINIC_DOMAIN__/portal",
+      "name": "Patient Portal | __CLINIC_NAME__ EMR",
+      "description": "Patient portal for __CLINIC_NAME__, letting parents view and download their child's past prescriptions.",
       "isPartOf": {
-        "@id": "https://www.thebetterhealth.clinic/#website"
+        "@id": "https://__CLINIC_DOMAIN__/#website"
       },
       "about": {
-        "@id": "https://www.thebetterhealth.clinic/#clinic"
+        "@id": "https://__CLINIC_DOMAIN__/#clinic"
       }
     }
   ]
@@ -991,7 +991,7 @@
           </svg>
         </div>
         <div class="brand-copy">
-          <strong>The Better Kids Clinic</strong>
+          <strong>__CLINIC_NAME__</strong>
           <span>Patient Portal</span>
         </div>
       </div>
@@ -1099,13 +1099,13 @@
       <div id="settings-list" class="visit-list"></div>
     </section>
 
-    <p class="footnote">Trouble finding your records? Call the clinic at <a href="tel:+919686183999">+91 96861 83999</a>.</p>
+    <p class="footnote">Trouble finding your records? Call the clinic at <a href="tel:__CLINIC_PHONE__">+91 96861 83999</a>.</p>
   </div>
   </div>
 
   <nav class="bottom-nav" aria-label="Portal navigation">
     <div class="bottom-nav-inner">
-      <a class="bottom-nav-item is-active" href="/emr/kid/portal" aria-current="page">
+      <a class="bottom-nav-item is-active" href="/portal" aria-current="page">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 3h8l4 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12h6M9 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <span>Prescriptions</span>
       </a>
@@ -1120,7 +1120,7 @@
     </div>
   </nav>
 
-  <div class="nav-toast" id="nav-toast">Appointment booking is coming soon. Call <a href="tel:+919686183999">+91 96861 83999</a> to book.</div>
+  <div class="nav-toast" id="nav-toast">Appointment booking is coming soon. Call <a href="tel:__CLINIC_PHONE__">+91 96861 83999</a> to book.</div>
 
   <div id="logout-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="logout-modal-title">
     <div class="modal-card">
@@ -1138,7 +1138,7 @@
     import { getDownloadURL, ref } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js';
     import { db, storage } from './lib/firebase-init.js';
 
-    const CLINIC_FIREBASE_NAMESPACE = import.meta.env.VITE_CLINIC_NAMESPACE || 'clinics/kid-pedinex-dev';
+    const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
       history: `${CLINIC_FIREBASE_NAMESPACE}/history`
@@ -1744,7 +1744,7 @@
       try {
         const accessToken = await widgetVerifyOtp(code);
 
-        const response = await fetch('/api/kid/otp/verify', {
+        const response = await fetch('/api/otp/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ phone: pendingPhoneDigits, accessToken })
@@ -1829,7 +1829,7 @@
         return;
       }
       try {
-        await fetch('/api/kid/otp/logout', { method: 'POST' });
+        await fetch('/api/otp/logout', { method: 'POST' });
       } catch {
         // Ignore sign-out failures; we still clear local state below.
       }
@@ -1860,7 +1860,7 @@
 
     (async function restorePatientSession() {
       try {
-        const response = await fetch('/api/kid/otp/session');
+        const response = await fetch('/api/otp/session');
         if (!response.ok) {
           return;
         }
@@ -1888,7 +1888,7 @@
 
   <script>
     if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
-      navigator.serviceWorker.register('/emr/kid/sw.js', { scope: '/emr/kid/' }).catch(() => {});
+      navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});
     }
 
     const ILLUSTRATION_SLIDES = [

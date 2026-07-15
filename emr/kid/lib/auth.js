@@ -1,7 +1,10 @@
 export const SESSION_COOKIE_NAME = 'clinic_session';
 export const SESSION_TTL_SECONDS = 60 * 60 * 12;
 
-const APP_BASE_SEGMENT = '/emr/kid';
+// This template is deployed standalone at the domain root, so there is no
+// nested base path segment to strip. Kept as an unmatchable sentinel so the
+// base-path helpers below remain no-ops rather than requiring a rewrite.
+const APP_BASE_SEGMENT = '/__standalone__';
 
 const PROTECTED_PATHS = new Set([
   '/',
@@ -107,7 +110,7 @@ export function getDefaultProtectedPath(useAppBase) {
 }
 
 export function isProtectedPath(pathname) {
-  return false;
+  return PROTECTED_PATHS.has(normalizeAppPath(pathname));
 }
 
 export function isPublicPath(pathname) {

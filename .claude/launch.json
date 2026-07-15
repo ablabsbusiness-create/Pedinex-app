@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "emr-kid-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "emr/kid", "exec", "vite"],
+      "port": 5173
+    },
+    {
+      "name": "emr-kid-preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "emr/kid", "exec", "vite", "preview", "--port", "4173"],
+      "port": 4173
+    }
+  ]
+}

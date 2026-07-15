@@ -1,15 +1,13 @@
 {
-  "name": "better-kids-emr",
+  "name": "emr-template",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "predev": "node ../../scripts/sync-portal-shared-css.mjs && node ./scripts/ensure-iap-assets.mjs",
+    "setup": "node scripts/setup-template.js",
+    "predev": "node ./scripts/ensure-iap-assets.mjs",
     "dev": "vite",
-    "import:csv": "node ./scripts/import-kid-csvs.mjs",
-    "migrate:patient-ids": "node ./scripts/reassign-kid-patient-ids.mjs",
-    "backfill:csv-prescription-pdfs": "node ./scripts/backfill-csv-prescription-pdfs.mjs",
-    "prebuild": "node ../../scripts/sync-portal-shared-css.mjs && node ./scripts/ensure-iap-assets.mjs",
+    "prebuild": "node ./scripts/ensure-iap-assets.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

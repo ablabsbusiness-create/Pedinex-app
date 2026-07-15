@@ -4,44 +4,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Prescription | The Better Kids Clinic EMR</title>
+  <title>Prescription | __CLINIC_NAME__ EMR</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="manifest" href="/emr/kid/site.webmanifest" />
-  <meta name="description" content="Prescription page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic." />
-  <link rel="canonical" href="https://www.thebetterhealth.clinic/emr/kid/prescription" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="description" content="Prescription page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
+  <link rel="canonical" href="https://__CLINIC_DOMAIN__/prescription" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The Better Health Clinic" />
-  <meta property="og:title" content="Prescription | The Better Kids Clinic EMR" />
-  <meta property="og:description" content="Prescription page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic." />
-  <meta property="og:url" content="https://www.thebetterhealth.clinic/emr/kid/prescription" />
+  <meta property="og:site_name" content="__CLINIC_NAME__" />
+  <meta property="og:title" content="Prescription | __CLINIC_NAME__ EMR" />
+  <meta property="og:description" content="Prescription page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
+  <meta property="og:url" content="https://__CLINIC_DOMAIN__/prescription" />
   <meta property="og:locale" content="en_IN" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Prescription | The Better Kids Clinic EMR" />
-  <meta name="twitter:description" content="Prescription page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic." />
+  <meta name="twitter:title" content="Prescription | __CLINIC_NAME__ EMR" />
+  <meta name="twitter:description" content="Prescription page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://www.thebetterhealth.clinic/#website",
-      "name": "The Better Health Clinic",
-      "url": "https://www.thebetterhealth.clinic/"
+      "@id": "https://__CLINIC_DOMAIN__/#website",
+      "name": "__CLINIC_NAME__",
+      "url": "https://__CLINIC_DOMAIN__/"
     },
     {
       "@type": "MedicalClinic",
-      "@id": "https://www.thebetterhealth.clinic/#clinic",
-      "name": "The Better Health Clinic",
-      "url": "https://www.thebetterhealth.clinic/",
+      "@id": "https://__CLINIC_DOMAIN__/#clinic",
+      "name": "__CLINIC_NAME__",
+      "url": "https://__CLINIC_DOMAIN__/",
       "telephone": [
-        "+919686183999",
-        "+919513988840"
+        "__CLINIC_PHONE__",
+        "__CLINIC_PHONE__"
       ],
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "#155, 2nd Cross, 1st stage, Arekere MICO Layout, Off Bannerghatta Road",
-        "addressLocality": "Bengaluru",
-        "postalCode": "560076",
+        "streetAddress": "__CLINIC_ADDRESS__",
+        "addressLocality": "",
+        "postalCode": "",
         "addressCountry": "IN"
       },
       "medicalSpecialty": [
@@ -51,15 +51,15 @@
     },
     {
       "@type": "WebPage",
-      "@id": "https://www.thebetterhealth.clinic/emr/kid/prescription#webpage",
-      "url": "https://www.thebetterhealth.clinic/emr/kid/prescription",
-      "name": "Prescription | The Better Kids Clinic EMR",
-      "description": "Prescription page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic.",
+      "@id": "https://__CLINIC_DOMAIN__/prescription#webpage",
+      "url": "https://__CLINIC_DOMAIN__/prescription",
+      "name": "Prescription | __CLINIC_NAME__ EMR",
+      "description": "Prescription page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__.",
       "isPartOf": {
-        "@id": "https://www.thebetterhealth.clinic/#website"
+        "@id": "https://__CLINIC_DOMAIN__/#website"
       },
       "about": {
-        "@id": "https://www.thebetterhealth.clinic/#clinic"
+        "@id": "https://__CLINIC_DOMAIN__/#clinic"
       }
     }
   ]
@@ -1387,17 +1387,17 @@
       <div class="brand">
         <div class="brand-mark">+</div>
         <div class="brand-copy">
-          <strong>The Better Health Clinic</strong>
+          <strong>__CLINIC_NAME__</strong>
           <span>Prescription</span>
         </div>
       </div>
 
       
       <nav id="primary-nav" class="nav-links" aria-label="Primary">
-        <a class="nav-link" href="/emr/kid/">Dashboard</a>
-        <a class="nav-link active" href="/emr/kid/search">Enter Clinic</a>
-        <a class="nav-link" href="/emr/kid/pending-approvals">Approvals</a>
-        <a class="nav-link" href="/emr/kid/settings">Settings</a>
+        <a class="nav-link" href="/">Dashboard</a>
+        <a class="nav-link active" href="/search">Enter Clinic</a>
+        <a class="nav-link" href="/pending-approvals">Approvals</a>
+        <a class="nav-link" href="/settings">Settings</a>
       </nav>
 
     </div>
@@ -1556,7 +1556,7 @@
       </div>
 
       <div class="page-action-row">
-            <a id="continue-preview-btn" class="btn-primary" href="/emr/kid/preview">Continue</a>
+            <a id="continue-preview-btn" class="btn-primary" href="/preview">Continue</a>
       </div>
     </section>
   </div>
@@ -1644,7 +1644,7 @@
   <script type="module">
     import { doc, getDoc, setDoc, arrayUnion, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
     import { db } from './lib/firebase-init.js';
-    const CLINIC_FIREBASE_NAMESPACE = import.meta.env.VITE_CLINIC_NAMESPACE || 'clinics/kid-pedinex-dev';
+    const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
       pendingPatients: `${CLINIC_FIREBASE_NAMESPACE}/pendingPatients`,
@@ -2687,8 +2687,8 @@
     function getPreviewTargetUrl() {
       const patientId = getCurrentPatientId() || getActiveChartRecord()?.patientId || '';
       return isValidPatientId(patientId)
-        ? `/emr/kid/preview?patientId=${encodeURIComponent(patientId)}`
-        : '/emr/kid/preview';
+        ? `/preview?patientId=${encodeURIComponent(patientId)}`
+        : '/preview';
     }
 
     function readLocalJson(key, fallback = null) {

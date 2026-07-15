@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Certificates | The Better Kids Clinic EMR</title>
+  <title>Certificates | __CLINIC_NAME__ EMR</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="manifest" href="/emr/kid/site.webmanifest" />
-  <meta name="description" content="Certificates page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic." />
-  <link rel="canonical" href="https://www.thebetterhealth.clinic/emr/kid/certificates" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="description" content="Certificates page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
+  <link rel="canonical" href="https://__CLINIC_DOMAIN__/certificates" />
   <script type="module" src="./auth-guard.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -532,18 +532,18 @@
 <body>
   <header class="site-header">
     <div class="topbar">
-      <a class="brand" href="/emr/kid/search">
+      <a class="brand" href="/search">
         <span class="brand-mark">CT</span>
         <span class="brand-copy">
-          <strong>The Better Health Clinic</strong>
+          <strong>__CLINIC_NAME__</strong>
           <span>Certificates</span>
         </span>
       </a>
       <nav id="primary-nav" class="nav-links" aria-label="Primary">
-        <a class="nav-link" href="/emr/kid/">Dashboard</a>
-        <a class="nav-link active" href="/emr/kid/search">Enter Clinic</a>
-        <a class="nav-link" href="/emr/kid/pending-approvals">Approvals</a>
-        <a class="nav-link" href="/emr/kid/settings">Settings</a>
+        <a class="nav-link" href="/">Dashboard</a>
+        <a class="nav-link active" href="/search">Enter Clinic</a>
+        <a class="nav-link" href="/pending-approvals">Approvals</a>
+        <a class="nav-link" href="/settings">Settings</a>
       </nav>
     </div>
   </header>
@@ -554,7 +554,7 @@
         <h1 id="patient-name-label">Loading patient...</h1>
         <p id="patient-meta-label">&nbsp;</p>
       </div>
-      <a id="back-to-profile-link" class="patient-bar-link" href="/emr/kid/search">Back to profile</a>
+      <a id="back-to-profile-link" class="patient-bar-link" href="/search">Back to profile</a>
     </div>
 
     <div id="status-note">Loading certificates module...</div>
@@ -613,7 +613,7 @@
           <div id="cert-sheet-scale">
             <div id="cert-sheet">
               <div class="cert-clinic-header">
-                <strong id="cert-clinic-name">The Better Health Clinic</strong>
+                <strong id="cert-clinic-name">__CLINIC_NAME__</strong>
                 <span id="cert-clinic-address"></span>
               </div>
               <div id="cert-title" class="cert-title">Select a certificate to begin</div>
@@ -631,7 +631,7 @@
                 <div class="cert-signature">
                   <img id="cert-signature-img" src="" alt="Signature" hidden />
                   <div class="cert-signature-line">
-                    <strong id="cert-doctor-name">Dr. Gunda Srinivas</strong>
+                    <strong id="cert-doctor-name">__DOCTOR_NAME__</strong>
                     <span id="cert-doctor-details">MBBS, DCH</span>
                   </div>
                 </div>
@@ -662,7 +662,7 @@
     import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js';
     import { db, storage } from './lib/firebase-init.js';
 
-    const CLINIC_FIREBASE_NAMESPACE = import.meta.env.VITE_CLINIC_NAMESPACE || 'clinics/kid-pedinex-dev';
+    const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
       certificates: `${CLINIC_FIREBASE_NAMESPACE}/certificates`,
@@ -672,9 +672,9 @@
     const BRANDING_DOC_PATH = [CLINIC_FIREBASE_NAMESPACE, 'clinicSettings', 'prescriptionBranding'];
 
     const DEFAULT_BRANDING = {
-      clinicTitle: 'The Better Health Clinic',
-      clinicAddress: 'The Better Health Clinic - Paediatrician #118, 5th Cross, Omkar Nagar Akere, Bannerghatta road 560076 Bengaluru Karnataka',
-      doctorName: 'Dr. Gunda Srinivas',
+      clinicTitle: '__CLINIC_NAME__',
+      clinicAddress: '__CLINIC_NAME__ - __CLINIC_ADDRESS__',
+      doctorName: '__DOCTOR_NAME__',
       doctorDetails: 'MBBS, DCH, DNB - Paediatrics, PGDDN, FPEM',
       signatureDataUrl: ''
     };
@@ -832,7 +832,7 @@
         return;
       }
 
-      backToProfileLink.href = `/emr/kid/search?patientId=${encodeURIComponent(patientId)}`;
+      backToProfileLink.href = `/search?patientId=${encodeURIComponent(patientId)}`;
       statusNote.textContent = 'Loading patient details...';
 
       const snapshot = await getDoc(doc(db, FIREBASE_COLLECTIONS.patients, patientId));

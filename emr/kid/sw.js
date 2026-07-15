@@ -1,8 +1,8 @@
 const CACHE_NAME = 'better-kids-emr-v1';
 const APP_SHELL = [
-  '/emr/kid/site.webmanifest',
-  '/emr/kid/icons/icon-192.png',
-  '/emr/kid/icons/icon-512.png'
+  '/site.webmanifest',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {

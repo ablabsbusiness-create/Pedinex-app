@@ -4,44 +4,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Search | The Better Kids Clinic EMR</title>
+  <title>Search | __CLINIC_NAME__ EMR</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="manifest" href="/emr/kid/site.webmanifest" />
-  <meta name="description" content="Search page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic." />
-  <link rel="canonical" href="https://www.thebetterhealth.clinic/emr/kid/search" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="description" content="Search page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
+  <link rel="canonical" href="https://__CLINIC_DOMAIN__/search" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="The Better Health Clinic" />
-  <meta property="og:title" content="Search | The Better Kids Clinic EMR" />
-  <meta property="og:description" content="Search page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic." />
-  <meta property="og:url" content="https://www.thebetterhealth.clinic/emr/kid/search" />
+  <meta property="og:site_name" content="__CLINIC_NAME__" />
+  <meta property="og:title" content="Search | __CLINIC_NAME__ EMR" />
+  <meta property="og:description" content="Search page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
+  <meta property="og:url" content="https://__CLINIC_DOMAIN__/search" />
   <meta property="og:locale" content="en_IN" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Search | The Better Kids Clinic EMR" />
-  <meta name="twitter:description" content="Search page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic." />
+  <meta name="twitter:title" content="Search | __CLINIC_NAME__ EMR" />
+  <meta name="twitter:description" content="Search page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://www.thebetterhealth.clinic/#website",
-      "name": "The Better Health Clinic",
-      "url": "https://www.thebetterhealth.clinic/"
+      "@id": "https://__CLINIC_DOMAIN__/#website",
+      "name": "__CLINIC_NAME__",
+      "url": "https://__CLINIC_DOMAIN__/"
     },
     {
       "@type": "MedicalClinic",
-      "@id": "https://www.thebetterhealth.clinic/#clinic",
-      "name": "The Better Health Clinic",
-      "url": "https://www.thebetterhealth.clinic/",
+      "@id": "https://__CLINIC_DOMAIN__/#clinic",
+      "name": "__CLINIC_NAME__",
+      "url": "https://__CLINIC_DOMAIN__/",
       "telephone": [
-        "+919686183999",
-        "+919513988840"
+        "__CLINIC_PHONE__",
+        "__CLINIC_PHONE__"
       ],
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "#155, 2nd Cross, 1st stage, Arekere MICO Layout, Off Bannerghatta Road",
-        "addressLocality": "Bengaluru",
-        "postalCode": "560076",
+        "streetAddress": "__CLINIC_ADDRESS__",
+        "addressLocality": "",
+        "postalCode": "",
         "addressCountry": "IN"
       },
       "medicalSpecialty": [
@@ -51,15 +51,15 @@
     },
     {
       "@type": "WebPage",
-      "@id": "https://www.thebetterhealth.clinic/emr/kid/search#webpage",
-      "url": "https://www.thebetterhealth.clinic/emr/kid/search",
-      "name": "Search | The Better Kids Clinic EMR",
-      "description": "Search page for The Better Kids Clinic EMR, supporting clinic workflows and patient care operations at The Better Health Clinic.",
+      "@id": "https://__CLINIC_DOMAIN__/search#webpage",
+      "url": "https://__CLINIC_DOMAIN__/search",
+      "name": "Search | __CLINIC_NAME__ EMR",
+      "description": "Search page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__.",
       "isPartOf": {
-        "@id": "https://www.thebetterhealth.clinic/#website"
+        "@id": "https://__CLINIC_DOMAIN__/#website"
       },
       "about": {
-        "@id": "https://www.thebetterhealth.clinic/#clinic"
+        "@id": "https://__CLINIC_DOMAIN__/#clinic"
       }
     }
   ]
@@ -130,9 +130,18 @@
       display: grid;
       place-items: center;
       font-size: 20px;
-      background: linear-gradient(135deg, #166534, #22c55e);
+      background: #fff;
       color: #fff;
       box-shadow: 0 10px 22px rgba(22, 101, 52, 0.22);
+      padding: 3px;
+      box-sizing: border-box;
+    }
+
+    .brand-mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
     }
 
     .brand-copy strong {
@@ -2007,19 +2016,19 @@
   <header class="site-header">
     <div class="topbar">
       <div class="brand">
-        <div class="brand-mark">🩺</div>
+        <div class="brand-mark"><img src="/icons/icon-192.png" alt="__CLINIC_NAME__ logo" /></div>
         <div class="brand-copy">
-          <strong>The Better Health Clinic</strong>
+          <strong>__CLINIC_NAME__</strong>
           <span>Growth Monitoring Portal</span>
         </div>
       </div>
 
       
       <nav id="primary-nav" class="nav-links" aria-label="Primary">
-        <a class="nav-link" href="/emr/kid/">Dashboard</a>
-        <a class="nav-link active" href="/emr/kid/search">Enter Clinic</a>
-        <a class="nav-link" href="/emr/kid/pending-approvals">Approvals</a>
-        <a class="nav-link" href="/emr/kid/settings">Settings</a>
+        <a class="nav-link" href="/">Dashboard</a>
+        <a class="nav-link active" href="/search">Enter Clinic</a>
+        <a class="nav-link" href="/pending-approvals">Approvals</a>
+        <a class="nav-link" href="/settings">Settings</a>
       </nav>
 
 
@@ -2035,7 +2044,7 @@
       <div class="search-row">
         <input id="search-input" type="text" placeholder="Search by child name or phone number or patient id" autocomplete="off">
         <button id="clear-btn" class="btn-primary" type="button">Clear Search</button>
-        <a id="new-patient-btn" class="btn-secondary" href="/emr/kid/new-patient">New Patient</a>
+        <a id="new-patient-btn" class="btn-secondary" href="/new-patient">New Patient</a>
       </div>
 
       <div id="status-note" class="status-note">Loading patients...</div>
@@ -2062,8 +2071,7 @@
     import { collection, doc, getDocs, limit, orderBy, query, serverTimestamp, setDoc, where } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
     import { getDownloadURL, getMetadata, listAll, ref } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js';
     import { db, storage } from './lib/firebase-init.js';
-    const CLINIC_FIREBASE_NAMESPACE = import.meta.env.VITE_CLINIC_NAMESPACE || 'clinics/kid-pedinex-dev';
-    const LEGACY_FIRESTORE_FALLBACK_ENABLED = CLINIC_FIREBASE_NAMESPACE === 'clinics/kid';
+    const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
       pendingPatients: `${CLINIC_FIREBASE_NAMESPACE}/pendingPatients`,
@@ -2116,7 +2124,7 @@
     let selectedPatientId = IS_PATIENT_DETAILS_PAGE ? routePatientId : '';
 
     function getPatientDetailsUrl(patientId) {
-      return `/emr/kid/patient-details?patientId=${encodeURIComponent(patientId || '')}`;
+      return `/patient-details?patientId=${encodeURIComponent(patientId || '')}`;
     }
 
     function openPatientDetailsOnPhone(patientId) {
@@ -2253,7 +2261,7 @@
       }
 
       const query = params.toString();
-      return query ? `/emr/kid/new-patient?${query}` : '/emr/kid/new-patient';
+      return query ? `/new-patient?${query}` : '/new-patient';
     }
 
     function updateNewPatientButton() {
@@ -2469,7 +2477,7 @@
         }
       }
 
-      const { snapshot, usedLegacy: usedLegacyPatients } = await getDocsWithLegacyFallback(FIREBASE_COLLECTIONS.patients, LEGACY_FIRESTORE_FALLBACK_ENABLED ? 'patients' : null);
+      const { snapshot, usedLegacy: usedLegacyPatients } = await getDocsWithLegacyFallback(FIREBASE_COLLECTIONS.patients, 'patients');
       const patientRecords = snapshot.docs
         .map((docSnapshot) => ({ id: docSnapshot.id, ...docSnapshot.data() }))
         .filter((patient) => !usedLegacyPatients || recordBelongsToCurrentClinic(patient));
@@ -2494,7 +2502,7 @@
         return true;
       }
 
-      return marker === CLINIC_FIREBASE_NAMESPACE.toLowerCase();
+      return marker === 'kid' || marker === CLINIC_FIREBASE_NAMESPACE.toLowerCase();
     }
 
     function setPrescriptionPreviewLoading(previewElement, message = 'Loading prescription preview...') {
@@ -3157,7 +3165,7 @@
 
     function formatVisiblePatientId(value) {
       const patientId = getNormalizedPatientId(value);
-      return /^TBK\d+$/i.test(patientId) ? patientId : '';
+      return /^__CLINIC_SHORT_NAME__\d+$/i.test(patientId) ? patientId : '';
     }
 
     function getIsoDatePart(dateValue) {
@@ -4317,7 +4325,7 @@
       if (patients.length === 0) {
         renderPlaceholder('No patients matched that search.', {
           title: searchValue ? `"${searchValue}" was not found.` : 'No patients found.',
-          actionHref: searchValue ? getNewPatientUrl(searchValue) : '/emr/kid/new-patient',
+          actionHref: searchValue ? getNewPatientUrl(searchValue) : '/new-patient',
           actionLabel: 'Add New Patient'
         });
         return;
@@ -4356,7 +4364,7 @@
                 <strong>${phone}</strong>
                 ${parentNameHtml}
               </div>
-              <a class="continue-link" href="/emr/kid/prescription-growth-chart-dashboard?patientId=${encodeURIComponent(patientId)}">Continue</a>
+              <a class="continue-link" href="/prescription-growth-chart-dashboard?patientId=${encodeURIComponent(patientId)}">Continue</a>
             </div>
 
           </article>
@@ -4378,7 +4386,7 @@
       if (patients.length === 0) {
         renderPlaceholder('No patients matched that search.', {
           title: searchValue ? `"${searchValue}" was not found.` : 'No patients found.',
-          actionHref: searchValue ? getNewPatientUrl(searchValue) : '/emr/kid/new-patient',
+          actionHref: searchValue ? getNewPatientUrl(searchValue) : '/new-patient',
           actionLabel: 'Add New Patient'
         });
         return;
@@ -4451,9 +4459,9 @@
                 <div class="doctor-patient-meta">
                   ${parentName ? `<span class="doctor-meta-chip">${parentName}</span>` : ''}
                   ${phone ? `<span class="doctor-meta-chip">${phone}</span>` : ''}
-                  <a class="continue-link" href="/emr/kid/vaccination?patientId=${encodeURIComponent(selectedPatientIdValue)}">Vaccination</a>
-                  <a class="continue-link" href="/emr/kid/certificates?patientId=${encodeURIComponent(selectedPatientIdValue)}">Certificates</a>
-                  <a class="continue-link" href="/emr/kid/prescription-growth-chart-dashboard?patientId=${encodeURIComponent(selectedPatientIdValue)}">Start Consult</a>
+                  <a class="continue-link" href="/vaccination?patientId=${encodeURIComponent(selectedPatientIdValue)}">Vaccination</a>
+                  <a class="continue-link" href="/certificates?patientId=${encodeURIComponent(selectedPatientIdValue)}">Certificates</a>
+                  <a class="continue-link" href="/prescription-growth-chart-dashboard?patientId=${encodeURIComponent(selectedPatientIdValue)}">Start Consult</a>
                 </div>
               </div>
 
@@ -4765,7 +4773,7 @@
           setStatus(showedCache ? 'Records updated. Loading visit history...' : 'Patients loaded. Loading visit history...');
         }
 
-        getDocsWithLegacyFallback(FIREBASE_COLLECTIONS.history, LEGACY_FIRESTORE_FALLBACK_ENABLED ? 'history' : null, [orderBy('createdAtIso', 'desc'), limit(HISTORY_FETCH_LIMIT)])
+        getDocsWithLegacyFallback(FIREBASE_COLLECTIONS.history, 'history', [orderBy('createdAtIso', 'desc'), limit(HISTORY_FETCH_LIMIT)])
           .then(({ snapshot: historySnapshot, usedLegacy: usedLegacyHistory }) => {
         const remoteHistory = historySnapshot.docs
           .map((docSnapshot) => normalizePrescriptionEntry({
