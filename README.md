@@ -49,7 +49,57 @@ already present. See `emr/kid/README.md` for the full deploy checklist
    enable Authentication, Firestore, and Storage, then copy the web app
    config values.
 
-4. Create `.env` from `.env.example` in the new folder and fill in:
+4. Publish the Firestore and Storage security rules. `npm run setup` (step
+   2) already replaced `__CLINIC_SHORT_NAME__` in
+   `emr/<new-clinic-slug>/firebase/firestore.rules` and `.../storage.rules`
+   with the clinic's short code. Paste each file's contents into the
+   Firebase Console (Firestore Database > **Rules**, and Storage >
+   **Rules**) and publish:
+
+   **`firestore.rules`:**
+
+   ```
+   rules_version = '2';
+
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /clinics/__CLINIC_SHORT_NAME__ {
+         allow read, write: if true;
+       }
+
+       match /clinics/__CLINIC_SHORT_NAME__/{document=**} {
+         allow read, write: if true;
+       }
+
+       match /{document=**} {
+         allow read, write: if false;
+       }
+     }
+   }
+   ```
+
+   **`storage.rules`:**
+
+   ```
+   rules_version = '2';
+
+   service firebase.storage {
+     match /b/{bucket}/o {
+       match /clinics/__CLINIC_SHORT_NAME__/{allPaths=**} {
+         allow read, write: if true;
+       }
+
+       match /{allPaths=**} {
+         allow read, write: if false;
+       }
+     }
+   }
+   ```
+
+   Without these published, Firestore/Storage default to deny-all and the
+   app can't read or write any data.
+
+5. Create `.env` from `.env.example` in the new folder and fill in:
    - `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`,
      `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`,
      `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`,
@@ -64,18 +114,18 @@ already present. See `emr/kid/README.md` for the full deploy checklist
      `emr/<new-clinic-slug>/README.md` for details, only needed if MSG91
      is actually wired up).
 
-5. Run it locally:
+6. Run it locally:
 
    ```bash
    npm run dev
    ```
 
-6. Deploy: create a **new** Vercel project, set the Root Directory to
+7. Deploy: create a **new** Vercel project, set the Root Directory to
    `emr/<new-clinic-slug>`, set build command `npm run build` and output
-   directory `dist`, and add all the env vars from step 4 in the Vercel
+   directory `dist`, and add all the env vars from step 5 in the Vercel
    project settings.
 
-7. Post-deploy smoke test: log into the patient portal, add a test patient,
+8. Post-deploy smoke test: log into the patient portal, add a test patient,
    generate a prescription/certificate PDF, and check the growth chart
    renders.
 

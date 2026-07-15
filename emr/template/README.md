@@ -64,6 +64,46 @@ of an allowlist of clinics. If you already ran `npm run setup` (step 3), the
 your clinic's short code; if not, re-run `npm run setup` or edit the two
 files by hand before deploying them.
 
+**`firebase/firestore.rules`:**
+
+```
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /clinics/__CLINIC_SHORT_NAME__ {
+      allow read, write: if true;
+    }
+
+    match /clinics/__CLINIC_SHORT_NAME__/{document=**} {
+      allow read, write: if true;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+```
+
+**`firebase/storage.rules`:**
+
+```
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /clinics/__CLINIC_SHORT_NAME__/{allPaths=**} {
+      allow read, write: if true;
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
+```
+
 Deploy them from the Firebase Console (simplest, no extra tooling):
 
 1. **Firestore rules**: Firebase Console > Firestore Database > **Rules**
