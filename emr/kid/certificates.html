@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Certificates | __CLINIC_NAME__ EMR</title>
+  <title>Certificates | PediaNex EMR</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="manifest" href="/site.webmanifest" />
-  <meta name="description" content="Certificates page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
-  <link rel="canonical" href="https://__CLINIC_DOMAIN__/certificates" />
+  <meta name="description" content="Certificates page for PediaNex EMR, supporting clinic workflows and patient care operations at PediaNex." />
+  <link rel="canonical" href="https://pedinex-app.vercel.app/certificates" />
   <script type="module" src="./auth-guard.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -535,7 +535,7 @@
       <a class="brand" href="/search">
         <span class="brand-mark">CT</span>
         <span class="brand-copy">
-          <strong>__CLINIC_NAME__</strong>
+          <strong>PediaNex</strong>
           <span>Certificates</span>
         </span>
       </a>
@@ -613,7 +613,7 @@
           <div id="cert-sheet-scale">
             <div id="cert-sheet">
               <div class="cert-clinic-header">
-                <strong id="cert-clinic-name">__CLINIC_NAME__</strong>
+                <strong id="cert-clinic-name">PediaNex</strong>
                 <span id="cert-clinic-address"></span>
               </div>
               <div id="cert-title" class="cert-title">Select a certificate to begin</div>
@@ -672,8 +672,8 @@
     const BRANDING_DOC_PATH = [CLINIC_FIREBASE_NAMESPACE, 'clinicSettings', 'prescriptionBranding'];
 
     const DEFAULT_BRANDING = {
-      clinicTitle: '__CLINIC_NAME__',
-      clinicAddress: '__CLINIC_NAME__ - __CLINIC_ADDRESS__',
+      clinicTitle: 'PediaNex',
+      clinicAddress: 'PediaNex - __CLINIC_ADDRESS__',
       doctorName: '__DOCTOR_NAME__',
       doctorDetails: 'MBBS, DCH, DNB - Paediatrics, PGDDN, FPEM',
       signatureDataUrl: ''

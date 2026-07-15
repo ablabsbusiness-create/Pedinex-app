@@ -4,35 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Settings | __CLINIC_NAME__ EMR</title>
+  <title>Settings | PediaNex EMR</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="manifest" href="/site.webmanifest" />
-  <meta name="description" content="Settings page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
-  <link rel="canonical" href="https://__CLINIC_DOMAIN__/settings" />
+  <meta name="description" content="Settings page for PediaNex EMR, supporting clinic workflows and patient care operations at PediaNex." />
+  <link rel="canonical" href="https://pedinex-app.vercel.app/settings" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="__CLINIC_NAME__" />
-  <meta property="og:title" content="Settings | __CLINIC_NAME__ EMR" />
-  <meta property="og:description" content="Settings page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
-  <meta property="og:url" content="https://__CLINIC_DOMAIN__/settings" />
+  <meta property="og:site_name" content="PediaNex" />
+  <meta property="og:title" content="Settings | PediaNex EMR" />
+  <meta property="og:description" content="Settings page for PediaNex EMR, supporting clinic workflows and patient care operations at PediaNex." />
+  <meta property="og:url" content="https://pedinex-app.vercel.app/settings" />
   <meta property="og:locale" content="en_IN" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Settings | __CLINIC_NAME__ EMR" />
-  <meta name="twitter:description" content="Settings page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__." />
+  <meta name="twitter:title" content="Settings | PediaNex EMR" />
+  <meta name="twitter:description" content="Settings page for PediaNex EMR, supporting clinic workflows and patient care operations at PediaNex." />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://__CLINIC_DOMAIN__/#website",
-      "name": "__CLINIC_NAME__",
-      "url": "https://__CLINIC_DOMAIN__/"
+      "@id": "https://pedinex-app.vercel.app/#website",
+      "name": "PediaNex",
+      "url": "https://pedinex-app.vercel.app/"
     },
     {
       "@type": "MedicalClinic",
-      "@id": "https://__CLINIC_DOMAIN__/#clinic",
-      "name": "__CLINIC_NAME__",
-      "url": "https://__CLINIC_DOMAIN__/",
+      "@id": "https://pedinex-app.vercel.app/#clinic",
+      "name": "PediaNex",
+      "url": "https://pedinex-app.vercel.app/",
       "telephone": [
         "__CLINIC_PHONE__",
         "__CLINIC_PHONE__"
@@ -51,15 +51,15 @@
     },
     {
       "@type": "WebPage",
-      "@id": "https://__CLINIC_DOMAIN__/settings#webpage",
-      "url": "https://__CLINIC_DOMAIN__/settings",
-      "name": "Settings | __CLINIC_NAME__ EMR",
-      "description": "Settings page for __CLINIC_NAME__ EMR, supporting clinic workflows and patient care operations at __CLINIC_NAME__.",
+      "@id": "https://pedinex-app.vercel.app/settings#webpage",
+      "url": "https://pedinex-app.vercel.app/settings",
+      "name": "Settings | PediaNex EMR",
+      "description": "Settings page for PediaNex EMR, supporting clinic workflows and patient care operations at PediaNex.",
       "isPartOf": {
-        "@id": "https://__CLINIC_DOMAIN__/#website"
+        "@id": "https://pedinex-app.vercel.app/#website"
       },
       "about": {
-        "@id": "https://__CLINIC_DOMAIN__/#clinic"
+        "@id": "https://pedinex-app.vercel.app/#clinic"
       }
     }
   ]
@@ -1260,9 +1260,9 @@
   <header class="site-header">
     <div class="topbar">
       <div class="brand">
-        <div class="brand-mark"><img src="/icons/icon-192.png" alt="__CLINIC_NAME__ logo" /></div>
+        <div class="brand-mark"><img src="/icons/icon-192.png" alt="PediaNex logo" /></div>
         <div class="brand-copy">
-          <strong>__CLINIC_NAME__</strong>
+          <strong>PediaNex</strong>
           <span>Setting</span>
         </div>
       </div>
@@ -1476,7 +1476,7 @@
             <div class="branding-grid">
               <div class="branding-field">
                 <label for="clinic-title-input">Clinic header title</label>
-                <input id="clinic-title-input" type="text" placeholder="__CLINIC_NAME__">
+                <input id="clinic-title-input" type="text" placeholder="PediaNex">
               </div>
 
               <div class="branding-field">
@@ -1645,11 +1645,11 @@
     const DEFAULT_BRANDING = {
       sectionTitle: 'Prescription Header, Footer & Signature',
       sectionDescription: 'Set the clinic text and doctor signature used on prescription preview, print, and saved PDF.',
-      clinicTitle: '__CLINIC_NAME__',
-      clinicAddress: '__CLINIC_NAME__ - __CLINIC_ADDRESS__',
+      clinicTitle: 'PediaNex',
+      clinicAddress: 'PediaNex - __CLINIC_ADDRESS__',
       doctorName: '__DOCTOR_NAME__',
       doctorDetails: 'MBBS, DCH, DNB - Paediatrics, PGDDN, FPEM\n71826',
-      footerText: '__CLINIC_NAME__ - __CLINIC_ADDRESS__',
+      footerText: 'PediaNex - __CLINIC_ADDRESS__',
       printWithoutHeaderTitle: 'Print Without Header',
       printWithoutHeaderDescription: 'Choose how much blank top space to leave when you print or save without the prescription header.',
       printHeaderGapCm: 0,

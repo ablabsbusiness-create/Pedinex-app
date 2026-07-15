@@ -1,7 +1,7 @@
 {
-  "name": "__CLINIC_NAME__ EMR",
+  "name": "PediaNex EMR",
   "short_name": "__CLINIC_SHORT_NAME__",
-  "description": "Standalone EMR web app for __CLINIC_NAME__ pediatric workflows.",
+  "description": "Standalone EMR web app for PediaNex pediatric workflows.",
   "start_url": "/password.html",
   "scope": "/",
   "display": "standalone",
