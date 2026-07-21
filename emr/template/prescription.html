@@ -445,6 +445,8 @@
     .page-action-row {
       display: flex;
       justify-content: flex-end;
+      align-items: center;
+      gap: 14px;
       margin-top: 22px;
     }
 
@@ -692,6 +694,355 @@
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 8px 18px rgba(22, 38, 29, 0.08);
+    }
+
+    .templates-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(22, 101, 52, 0.22);
+      background: linear-gradient(135deg, #dcfce7, #f0fdf4);
+      color: #166534;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(22, 101, 52, 0.12);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .templates-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .templates-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(22, 101, 52, 0.18);
+    }
+
+    .consult-template-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(10, 30, 20, 0.6);
+      backdrop-filter: blur(10px);
+    }
+
+    .consult-template-modal.is-open {
+      display: flex;
+    }
+
+    .consult-template-dialog {
+      width: min(640px, 100%);
+      max-height: 88vh;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      overflow: hidden;
+      border-radius: 24px;
+      background: #f8faf8;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: 0 30px 80px rgba(31, 12, 66, 0.32);
+    }
+
+    .consult-template-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 18px 18px 22px;
+      border-bottom: 1px solid rgba(221, 214, 254, 0.9);
+      background: linear-gradient(135deg, #dcfce7, #ffffff);
+    }
+
+    .consult-template-head-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      border-radius: 14px;
+      background: #166534;
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(22, 101, 52, 0.28);
+    }
+
+    .consult-template-head-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .consult-template-head-titles {
+      flex: 1;
+      min-width: 0;
+      display: grid;
+      gap: 2px;
+    }
+
+    .consult-template-head strong {
+      font-size: 17px;
+      color: #14532d;
+    }
+
+    .consult-template-head-titles p {
+      margin: 0;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .consult-template-body {
+      min-height: 0;
+      overflow-y: auto;
+      padding: 22px;
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .consult-template-save-panel {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px dashed rgba(22, 101, 52, 0.32);
+      background: rgba(237, 233, 254, 0.35);
+    }
+
+    .consult-template-save-label {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #14532d;
+    }
+
+    .consult-template-save-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .consult-template-save-row input {
+      flex: 1;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(22, 101, 52, 0.22);
+      background: #fff;
+      font: inherit;
+      color: var(--ink);
+    }
+
+    .consult-template-save-row input:focus-visible {
+      outline: 2px solid rgba(22, 101, 52, 0.4);
+      outline-offset: 1px;
+    }
+
+    .consult-template-save-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 12px;
+      border: 0;
+      background: linear-gradient(135deg, #166534, #14532d);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      font-size: 13.5px;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(22, 101, 52, 0.24);
+      transition: transform 0.15s ease;
+    }
+
+    .consult-template-save-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .consult-template-save-btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+      transform: none;
+    }
+
+    .consult-template-error {
+      color: #b91c1c;
+      font-size: 13px;
+      font-weight: 700;
+      display: none;
+    }
+
+    .consult-template-error.is-visible {
+      display: block;
+    }
+
+    .consult-template-section-label {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .consult-template-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .consult-template-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(22, 101, 52, 0.14);
+      background: #fff;
+      box-shadow: 0 6px 16px rgba(31, 12, 66, 0.05);
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+    }
+
+    .consult-template-row:hover {
+      box-shadow: 0 10px 22px rgba(31, 12, 66, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .consult-template-row-icon {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      border-radius: 10px;
+      background: #dcfce7;
+      color: #14532d;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .consult-template-row-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .consult-template-row-info {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .consult-template-row-info strong {
+      font-size: 14.5px;
+      color: var(--ink);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .consult-template-row-info span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .consult-template-row-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .consult-template-apply-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(22, 101, 52, 0.28);
+      background: #f0fdf4;
+      color: #14532d;
+      font: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .consult-template-apply-btn:hover {
+      background: #dcfce7;
+    }
+
+    .consult-template-delete-btn {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: #b91c1c;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .consult-template-delete-btn:hover {
+      background: #fef2f2;
+    }
+
+    .consult-template-empty {
+      padding: 32px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13.5px;
+      border-radius: 14px;
+      border: 1px dashed rgba(22, 101, 52, 0.2);
+      background: rgba(237, 233, 254, 0.25);
+    }
+
+    .dosage-warning-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      margin: 0 0 14px;
+      border-radius: 12px;
+      border: 1px solid #f3d98c;
+      background: #fef8e7;
+      color: #92660a;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .dosage-warning-banner[hidden] {
+      display: none;
+    }
+
+    .edit-mode-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      margin: 0 0 14px;
+      border-radius: 12px;
+      border: 1px solid #9fd8b0;
+      background: #eaf9ef;
+      color: #146c34;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .edit-mode-banner[hidden] {
+      display: none;
     }
 
     .medicine-edit-btn {
@@ -1557,10 +1908,45 @@
         </div>
       </div>
 
+      <div id="edit-mode-banner" class="edit-mode-banner" hidden></div>
+
+      <div id="dosage-warning-banner" class="dosage-warning-banner" hidden></div>
+
       <div class="page-action-row">
+            <button id="open-templates-btn" class="templates-btn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="4" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="10" width="18" height="4" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="16" width="18" height="4" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg>
+              <span>Templates</span>
+            </button>
             <a id="continue-preview-btn" class="btn-primary" href="/preview">Continue</a>
       </div>
     </section>
+  </div>
+
+  <div id="consult-template-modal" class="consult-template-modal" aria-hidden="true">
+    <div class="consult-template-dialog" role="dialog" aria-modal="true" aria-labelledby="consult-template-title">
+      <div class="consult-template-head">
+        <div class="consult-template-head-icon">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="4" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="10" width="18" height="4" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="16" width="18" height="4" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg>
+        </div>
+        <div class="consult-template-head-titles">
+          <strong id="consult-template-title">Consult Templates</strong>
+          <p>Save this consult or reapply a saved one in one click</p>
+        </div>
+        <button id="consult-template-close" class="modal-close-btn" type="button" aria-label="Close templates">x</button>
+      </div>
+      <div class="consult-template-body">
+        <div class="consult-template-save-panel">
+          <span class="consult-template-save-label">Save current consult</span>
+          <div class="consult-template-save-row">
+            <input id="consult-template-name-input" type="text" placeholder="Name this consult (e.g. 6 Week Vaccination)">
+            <button id="consult-template-save-btn" class="consult-template-save-btn" type="button">Save Template</button>
+          </div>
+          <div id="consult-template-error" class="consult-template-error"></div>
+        </div>
+        <span class="consult-template-section-label">Saved templates</span>
+        <div id="consult-template-list" class="consult-template-list"></div>
+      </div>
+    </div>
   </div>
 
   <div id="detail-panel-templates" hidden>
@@ -1644,18 +2030,21 @@
   </div>
 
   <script type="module">
-    import { doc, getDoc, setDoc, arrayUnion, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
+    import { doc, getDoc, setDoc, arrayUnion, serverTimestamp, collection, getDocs, query, orderBy, deleteDoc } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
     import { db } from './lib/firebase-init.js';
     const CLINIC_FIREBASE_NAMESPACE = 'clinics/__CLINIC_SHORT_NAME__';
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
       pendingPatients: `${CLINIC_FIREBASE_NAMESPACE}/pendingPatients`,
       history: `${CLINIC_FIREBASE_NAMESPACE}/history`,
-      prescription: `${CLINIC_FIREBASE_NAMESPACE}/prescription`
+      prescription: `${CLINIC_FIREBASE_NAMESPACE}/prescription`,
+      consultTemplates: `${CLINIC_FIREBASE_NAMESPACE}/consultTemplates`
     };
     const CLINIC_STORAGE_PREFIX = CLINIC_FIREBASE_NAMESPACE;
     const CLINIC_LOCAL_STORAGE_PREFIX = CLINIC_FIREBASE_NAMESPACE.replace(/\//g, ':');
     const clinicStorageKey = (key) => `${CLINIC_LOCAL_STORAGE_PREFIX}:${key}`;
+    const PRESCRIPTION_EDIT_WINDOW_MS = 2 * 60 * 60 * 1000;
+    let activePrescriptionEditId = '';
 
     const menuToggle = document.getElementById('menu-toggle');
     const primaryNav = document.getElementById('primary-nav');
@@ -1665,6 +2054,15 @@
     const cardGrid = document.querySelector('.card-grid');
     const medicineModal = document.getElementById('medicine-modal');
     const medicineModalClose = document.getElementById('medicine-modal-close');
+    const openTemplatesBtn = document.getElementById('open-templates-btn');
+    const consultTemplateModal = document.getElementById('consult-template-modal');
+    const consultTemplateClose = document.getElementById('consult-template-close');
+    const consultTemplateNameInput = document.getElementById('consult-template-name-input');
+    const consultTemplateSaveBtn = document.getElementById('consult-template-save-btn');
+    const consultTemplateError = document.getElementById('consult-template-error');
+    const consultTemplateList = document.getElementById('consult-template-list');
+    const dosageWarningBanner = document.getElementById('dosage-warning-banner');
+    const editModeBanner = document.getElementById('edit-mode-banner');
     const medicineModalEdit = document.getElementById('medicine-modal-edit');
     const medicineModalTitle = document.getElementById('medicine-modal-title');
     const medicineModalSubtitle = medicineModalTitle?.parentElement?.querySelector('p');
@@ -1870,6 +2268,7 @@
 
     function closeMedicineModal() {
       syncMedicineDetailsFromDom();
+      updateDosageWarningBanner();
       showSectionPanel('Medication', null);
       if (medicineModalEdit) {
         medicineModalEdit.disabled = true;
@@ -2717,10 +3116,29 @@
       return `rx-${patientId || 'UNKNOWN'}-${Date.now()}-${randomPart}`;
     }
 
-    function savePrescriptionDraft() {
-      const chartRecord = getActiveChartRecord();
-      const patientId = getCurrentPatientId() || chartRecord?.patientId || '';
-      const validPatientId = isValidPatientId(patientId) ? patientId : '';
+    function updateDosageWarningBanner() {
+      if (!dosageWarningBanner) {
+        return;
+      }
+
+      const missingDoseMedicines = [...selectedMedicines].filter((medicine) => {
+        const detail = medicineDetails.get(medicine);
+        return !detail || !String(detail.dose || '').trim();
+      });
+
+      if (!missingDoseMedicines.length) {
+        dosageWarningBanner.hidden = true;
+        dosageWarningBanner.textContent = '';
+        return;
+      }
+
+      dosageWarningBanner.hidden = false;
+      dosageWarningBanner.textContent = missingDoseMedicines.length === 1
+        ? `You have added ${missingDoseMedicines[0]} without a dosage.`
+        : `You have added ${missingDoseMedicines.length} medicines without a dosage.`;
+    }
+
+    function serializeCurrentSelections() {
       const sections = {};
       const details = {};
 
@@ -2742,8 +3160,18 @@
         }
       });
 
+      return { sections, sectionDetails, medicineDetails: details };
+    }
+
+    function savePrescriptionDraft() {
+      const chartRecord = getActiveChartRecord();
+      const patientId = getCurrentPatientId() || chartRecord?.patientId || '';
+      const validPatientId = isValidPatientId(patientId) ? patientId : '';
+      const { sections, sectionDetails, medicineDetails: details } = serializeCurrentSelections();
+
       localStorage.setItem(PRESCRIPTION_DRAFT_STORAGE_KEY, JSON.stringify({
         draftId: getPrescriptionDraftId(validPatientId),
+        editId: activePrescriptionEditId || '',
         savedAt: new Date().toISOString(),
         expiresAt: Date.now() + PRESCRIPTION_DRAFT_TTL_MS,
         patientId: validPatientId,
@@ -2752,6 +3180,7 @@
         medicineDetails: details
       }));
       continuePreviewBtn.href = getPreviewTargetUrl();
+      updateDosageWarningBanner();
     }
 
     function slugify(value) {
@@ -3423,7 +3852,8 @@
         }
       }
 
-      function toggleValue(value, shouldSelect, trigger = document.activeElement) {
+      function toggleValue(value, shouldSelect, trigger = document.activeElement, options = {}) {
+        const { silent = false } = options;
         const isNewSelection = shouldSelect && !selectedValues.has(value);
 
         getBubbleButtons().forEach((button) => {
@@ -3461,11 +3891,19 @@
             }
           }
 
-          renderMedicineDetails();
+          updateDosageWarningBanner();
 
-          if (shouldSelect || activeMedicine) {
-            openMedicineModal(modalTrigger);
+          if (!silent) {
+            renderMedicineDetails();
+
+            if (shouldSelect || activeMedicine) {
+              openMedicineModal(modalTrigger);
+            }
           }
+          return;
+        }
+
+        if (silent) {
           return;
         }
 
@@ -3622,6 +4060,7 @@
       applySearchFilter();
       sectionBindings.set(sectionName, {
         updateItems,
+        toggleValue,
         refreshSelectedList: () => renderSelectedItems(selectedList, [...selectedValues], sectionName)
       });
     }
@@ -3668,8 +4107,277 @@
       }
     }
 
+    async function applyRepeatSelections(record) {
+      if (!record) {
+        return;
+      }
+
+      const sections = record.sections || {};
+      const sectionDetails = record.sectionDetails || {};
+      const medDetails = record.medicineDetails || {};
+
+      Object.entries(sections).forEach(([sectionName, items]) => {
+        const binding = sectionBindings.get(sectionName);
+        if (!binding || !Array.isArray(items)) {
+          return;
+        }
+
+        items.forEach((value) => {
+          binding.toggleValue(value, true, document.activeElement, { silent: true });
+        });
+      });
+
+      Object.entries(sectionDetails).forEach(([sectionName, detailMap]) => {
+        if (!sectionItemDetails[sectionName] || !detailMap) {
+          return;
+        }
+
+        Object.entries(detailMap).forEach(([item, detail]) => {
+          sectionItemDetails[sectionName].set(item, { ...detail });
+        });
+      });
+
+      Object.entries(medDetails).forEach(([medicine, detail]) => {
+        medicineDetails.set(medicine, { ...detail, savedAt: Date.now() });
+      });
+
+      saveMedicineDetailsToStorage();
+      savePrescriptionDraft();
+    }
+
+    async function loadRepeatFromHistory() {
+      const repeatFromId = new URLSearchParams(window.location.search).get('repeatFrom');
+
+      if (!repeatFromId || !db) {
+        return;
+      }
+
+      try {
+        const snapshot = await getDoc(doc(db, FIREBASE_COLLECTIONS.history, repeatFromId));
+        if (snapshot.exists()) {
+          await applyRepeatSelections(snapshot.data());
+        }
+      } catch (error) {
+        console.warn(`Unable to load previous visit for repeat: ${error.message}`);
+      }
+    }
+
+    function getRecordCreatedAtMs(record) {
+      if (record?.createdAtIso) {
+        const parsed = new Date(record.createdAtIso).getTime();
+        if (!Number.isNaN(parsed)) {
+          return parsed;
+        }
+      }
+
+      if (record?.createdAt && typeof record.createdAt.toMillis === 'function') {
+        return record.createdAt.toMillis();
+      }
+
+      return 0;
+    }
+
+    function showEditModeBanner(message) {
+      if (!editModeBanner) {
+        return;
+      }
+
+      editModeBanner.textContent = message;
+      editModeBanner.hidden = !message;
+    }
+
+    async function loadEditFromHistory() {
+      const editId = (new URLSearchParams(window.location.search).get('editId') || '').trim();
+
+      if (!editId || !db) {
+        return;
+      }
+
+      try {
+        const snapshot = await getDoc(doc(db, FIREBASE_COLLECTIONS.history, editId));
+        if (!snapshot.exists()) {
+          alert('This prescription could not be found for editing.');
+          return;
+        }
+
+        const record = snapshot.data();
+        const createdAtMs = getRecordCreatedAtMs(record);
+        if (!createdAtMs || Date.now() - createdAtMs > PRESCRIPTION_EDIT_WINDOW_MS) {
+          alert('The 2-hour edit window for this prescription has expired.');
+          const patientId = record.patientId || getCurrentPatientId();
+          window.location.href = patientId
+            ? `patient-details.html?patientId=${encodeURIComponent(patientId)}`
+            : 'patient-details.html';
+          return;
+        }
+
+        await applyRepeatSelections(record);
+        activePrescriptionEditId = editId;
+        const expiresAt = new Date(createdAtMs + PRESCRIPTION_EDIT_WINDOW_MS);
+        showEditModeBanner(`Editing existing prescription. Edit window closes at ${expiresAt.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}.`);
+        savePrescriptionDraft();
+      } catch (error) {
+        console.warn(`Unable to load prescription for edit: ${error.message}`);
+      }
+    }
+
+    function showConsultTemplateError(message) {
+      consultTemplateError.textContent = message;
+      consultTemplateError.classList.toggle('is-visible', Boolean(message));
+    }
+
+    function formatTemplateItemCount(template) {
+      const sections = template.sections || {};
+      const count = Object.values(sections).reduce((sum, items) => sum + (Array.isArray(items) ? items.length : 0), 0);
+      return `${count} item${count === 1 ? '' : 's'}`;
+    }
+
+    function renderConsultTemplateList(templates) {
+      if (!templates.length) {
+        consultTemplateList.innerHTML = '<div class="consult-template-empty">No saved templates yet.</div>';
+        return;
+      }
+
+      consultTemplateList.innerHTML = templates.map((template) => {
+        const name = template.name || 'Untitled template';
+        const initial = name.trim().charAt(0).toUpperCase() || 'T';
+        return `
+        <div class="consult-template-row" data-template-id="${template.id}">
+          <div class="consult-template-row-main">
+            <div class="consult-template-row-icon">${escapeHtml(initial)}</div>
+            <div class="consult-template-row-info">
+              <strong>${escapeHtml(name)}</strong>
+              <span>${formatTemplateItemCount(template)}</span>
+            </div>
+          </div>
+          <div class="consult-template-row-actions">
+            <button class="consult-template-apply-btn" type="button" data-apply-template="${template.id}">Apply</button>
+            <button class="consult-template-delete-btn" type="button" data-delete-template="${template.id}" aria-label="Delete template">x</button>
+          </div>
+        </div>
+      `;
+      }).join('');
+    }
+
+    async function loadConsultTemplates() {
+      if (!db) {
+        consultTemplateList.innerHTML = '<div class="consult-template-empty">Online records are not configured.</div>';
+        return [];
+      }
+
+      consultTemplateList.innerHTML = '<div class="consult-template-empty">Loading templates...</div>';
+
+      try {
+        const snapshot = await getDocs(query(collection(db, FIREBASE_COLLECTIONS.consultTemplates), orderBy('createdAtIso', 'desc')));
+        const templates = snapshot.docs.map((templateDoc) => ({ id: templateDoc.id, ...templateDoc.data() }));
+        renderConsultTemplateList(templates);
+        return templates;
+      } catch (error) {
+        consultTemplateList.innerHTML = '<div class="consult-template-empty">Unable to load templates right now.</div>';
+        console.warn(`Unable to load consult templates: ${error.message}`);
+        return [];
+      }
+    }
+
+    async function saveCurrentAsTemplate() {
+      const name = consultTemplateNameInput.value.trim();
+      showConsultTemplateError('');
+
+      if (!name) {
+        showConsultTemplateError('Give this template a name.');
+        return;
+      }
+
+      const { sections, sectionDetails, medicineDetails: details } = serializeCurrentSelections();
+      const hasAnyItem = Object.values(sections).some((items) => Array.isArray(items) && items.length);
+
+      if (!hasAnyItem) {
+        showConsultTemplateError('Select at least one symptom, finding, diagnosis, or medicine first.');
+        return;
+      }
+
+      consultTemplateSaveBtn.disabled = true;
+
+      try {
+        const templateId = window.crypto?.randomUUID ? window.crypto.randomUUID() : `tpl-${Date.now()}`;
+        await setDoc(doc(db, FIREBASE_COLLECTIONS.consultTemplates, templateId), {
+          name,
+          sections,
+          sectionDetails,
+          medicineDetails: details,
+          createdAt: serverTimestamp(),
+          createdAtIso: new Date().toISOString()
+        });
+        consultTemplateNameInput.value = '';
+        await loadConsultTemplates();
+      } catch (error) {
+        showConsultTemplateError(error?.message || 'Unable to save this template right now.');
+      } finally {
+        consultTemplateSaveBtn.disabled = false;
+      }
+    }
+
+    async function applyConsultTemplate(templateId) {
+      try {
+        const snapshot = await getDoc(doc(db, FIREBASE_COLLECTIONS.consultTemplates, templateId));
+        if (snapshot.exists()) {
+          await applyRepeatSelections(snapshot.data());
+        }
+        closeConsultTemplateModal();
+      } catch (error) {
+        showConsultTemplateError(error?.message || 'Unable to apply this template right now.');
+      }
+    }
+
+    async function deleteConsultTemplate(templateId) {
+      try {
+        await deleteDoc(doc(db, FIREBASE_COLLECTIONS.consultTemplates, templateId));
+        await loadConsultTemplates();
+      } catch (error) {
+        showConsultTemplateError(error?.message || 'Unable to delete this template right now.');
+      }
+    }
+
+    function openConsultTemplateModal() {
+      consultTemplateModal.classList.add('is-open');
+      consultTemplateModal.setAttribute('aria-hidden', 'false');
+      showConsultTemplateError('');
+      loadConsultTemplates();
+    }
+
+    function closeConsultTemplateModal() {
+      consultTemplateModal.classList.remove('is-open');
+      consultTemplateModal.setAttribute('aria-hidden', 'true');
+    }
+
+    openTemplatesBtn.addEventListener('click', openConsultTemplateModal);
+    consultTemplateClose.addEventListener('click', closeConsultTemplateModal);
+    consultTemplateModal.addEventListener('click', (event) => {
+      if (event.target === consultTemplateModal) {
+        closeConsultTemplateModal();
+      }
+    });
+    consultTemplateSaveBtn.addEventListener('click', saveCurrentAsTemplate);
+    consultTemplateList.addEventListener('click', (event) => {
+      const applyId = event.target.closest('[data-apply-template]')?.getAttribute('data-apply-template');
+      const deleteId = event.target.closest('[data-delete-template]')?.getAttribute('data-delete-template');
+
+      if (applyId) {
+        applyConsultTemplate(applyId);
+      } else if (deleteId) {
+        deleteConsultTemplate(deleteId);
+      }
+    });
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && consultTemplateModal.classList.contains('is-open')) {
+        closeConsultTemplateModal();
+      }
+    });
+
     async function openInitialPrescriptionAction() {
       await initPrescriptionData();
+      await loadRepeatFromHistory();
+      await loadEditFromHistory();
 
       if (window.location.hash === '#add-medicine') {
         history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);

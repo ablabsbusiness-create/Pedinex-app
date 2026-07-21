@@ -860,11 +860,11 @@
       html,
       body {
         width: 210mm;
-        height: 297mm;
+        min-height: 297mm;
         margin: 0 !important;
         padding: 0 !important;
         background: #fff;
-        overflow: hidden;
+        overflow: visible;
       }
 
       .site-header,
@@ -898,17 +898,262 @@
       .rx-sheet {
         box-sizing: border-box;
         width: 210mm;
-        height: 297mm;
-        min-height: 0;
-        max-height: 297mm;
+        min-height: 297mm;
+        height: auto;
         padding: 8mm;
         border: 0;
         box-shadow: none;
         font-size: 10px;
-        overflow: hidden;
-        page-break-after: avoid;
-        page-break-inside: avoid;
+        overflow: visible;
       }
+    }
+
+    .billing-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(11, 22, 16, 0.68);
+      backdrop-filter: blur(10px);
+    }
+
+    .billing-modal.is-open {
+      display: flex;
+    }
+
+    .billing-dialog {
+      width: min(640px, 100%);
+      max-height: 90vh;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      overflow: hidden;
+      border-radius: 24px;
+      background: #f8fbf9;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: 0 30px 80px rgba(11, 22, 16, 0.28);
+    }
+
+    .billing-modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 16px 16px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .billing-modal-head strong {
+      font-size: 16px;
+    }
+
+    .billing-modal-close {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(22, 38, 29, 0.08);
+    }
+
+    .billing-modal-body {
+      min-height: 0;
+      overflow-y: auto;
+      padding: 20px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .billing-section-label {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .bill-item-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 120px 40px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .bill-item-custom-input {
+      grid-column: 1 / -1;
+    }
+
+    .bill-item-row select,
+    .bill-item-row input,
+    .billing-modal-body select,
+    .billing-modal-body input[type="number"] {
+      min-height: 42px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font: inherit;
+      color: var(--ink);
+    }
+
+    .bill-item-remove {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: #b91c1c;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .bill-item-add-btn {
+      justify-self: start;
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px dashed var(--line);
+      background: #fff;
+      color: var(--brand-strong);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .bill-totals-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 15px;
+      font-weight: 800;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+    }
+
+    .billing-error {
+      color: #b91c1c;
+      font-size: 13px;
+      font-weight: 700;
+      display: none;
+    }
+
+    .billing-error.is-visible {
+      display: block;
+    }
+
+    .billing-modal-foot {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 14px 20px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    #receipt-sheet-holder {
+      position: fixed;
+      left: -10000px;
+      top: 0;
+      z-index: -1;
+    }
+
+    #receipt-sheet {
+      width: 148mm;
+      background: #ffffff;
+      padding: 14mm 12mm;
+      font-family: 'Outfit', system-ui, sans-serif;
+      color: #10172a;
+    }
+
+    .receipt-clinic-header {
+      text-align: center;
+      border-bottom: 2px solid #166534;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+
+    .receipt-clinic-header strong {
+      display: block;
+      font-size: 18px;
+      color: #14532d;
+    }
+
+    .receipt-clinic-header span {
+      display: block;
+      font-size: 10.5px;
+      color: #4a5a4f;
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    .receipt-title {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin: 4px 0 14px;
+      color: #14532d;
+    }
+
+    .receipt-meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      margin-bottom: 4px;
+    }
+
+    .receipt-patient-info {
+      padding: 10px 12px;
+      border: 1px solid #d7e2d9;
+      border-radius: 8px;
+      margin: 10px 0 16px;
+      font-size: 11.5px;
+    }
+
+    .receipt-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      margin-bottom: 12px;
+    }
+
+    .receipt-items-table th,
+    .receipt-items-table td {
+      text-align: left;
+      padding: 6px 4px;
+      border-bottom: 1px solid #d7e2d9;
+    }
+
+    .receipt-items-table td:last-child,
+    .receipt-items-table th:last-child {
+      text-align: right;
+    }
+
+    .receipt-totals {
+      font-size: 12.5px;
+      display: grid;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .receipt-totals .is-total {
+      font-weight: 800;
+      font-size: 14px;
+      border-top: 1px solid #10172a;
+      padding-top: 6px;
+    }
+
+    .receipt-footer {
+      font-size: 10.5px;
+      color: #4a5a4f;
+      text-align: center;
+      margin-top: 20px;
     }
 
   </style>
@@ -951,7 +1196,9 @@
           </div>
           <button id="download-pdf-btn" class="btn-primary" type="button">Download PDF</button>
           <button id="print-pdf-btn" class="btn-secondary" type="button">Print PDF</button>
+          <button id="add-payment-btn" class="btn-secondary" type="button">Add Payment</button>
           <button id="whatsapp-btn" class="btn-whatsapp" type="button">WhatsApp</button>
+          <button id="edit-prescription-btn" class="btn-secondary" type="button" hidden>Edit Prescription</button>
         </div>
       </div>
       <div class="document-stage">
@@ -960,12 +1207,98 @@
     </section>
   </div>
 
+  <div id="bill-modal" class="billing-modal" aria-hidden="true">
+    <div class="billing-dialog" role="dialog" aria-modal="true" aria-labelledby="bill-modal-title">
+      <div class="billing-modal-head">
+        <strong id="bill-modal-title">Add Bill / Payment</strong>
+        <button id="bill-modal-close" class="billing-modal-close" type="button" aria-label="Close bill form">x</button>
+      </div>
+      <div class="billing-modal-body">
+        <div>
+          <div class="billing-section-label">Itemized Bill</div>
+          <div id="bill-items-container"></div>
+          <button id="bill-item-add-btn" class="bill-item-add-btn" type="button">+ Add Bill Item</button>
+        </div>
+
+        <div class="bill-totals-row">
+          <span>Total</span>
+          <span id="bill-total-display">₹0</span>
+        </div>
+
+        <div>
+          <div class="billing-section-label">Payment</div>
+          <select id="bill-payment-method"></select>
+        </div>
+
+        <div>
+          <div class="billing-section-label">Amount Paid</div>
+          <input id="bill-amount-paid" type="number" min="0" step="0.01" value="0">
+        </div>
+
+        <div class="bill-totals-row">
+          <span>Due</span>
+          <span id="bill-due-display">₹0</span>
+        </div>
+
+        <div id="bill-error" class="billing-error"></div>
+      </div>
+      <div class="billing-modal-foot">
+        <button id="bill-save-exit-btn" class="btn-secondary" type="button">Save &amp; Exit</button>
+        <button id="bill-save-print-btn" class="btn-primary" type="button">Save &amp; Print</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="receipt-sheet-holder" aria-hidden="true">
+    <div id="receipt-sheet">
+      <div class="receipt-clinic-header">
+        <strong id="receipt-clinic-name">__CLINIC_NAME__</strong>
+        <span id="receipt-clinic-address"></span>
+        <span id="receipt-doctor-name"></span>
+      </div>
+      <div class="receipt-title">Payment Receipt</div>
+      <div class="receipt-meta-row">
+        <span>Receipt No: <strong id="receipt-no-value"></strong></span>
+        <span>Date: <strong id="receipt-date-value"></strong></span>
+      </div>
+      <div class="receipt-meta-row">
+        <span>Bill No: <strong id="receipt-bill-no-value"></strong></span>
+      </div>
+      <div class="receipt-patient-info">
+        Patient: <strong id="receipt-patient-name"></strong><br>
+        Patient ID: <strong id="receipt-patient-id"></strong>
+      </div>
+      <table class="receipt-items-table">
+        <thead>
+          <tr><th>Description</th><th>Amount</th></tr>
+        </thead>
+        <tbody id="receipt-items-body"></tbody>
+      </table>
+      <div class="receipt-totals">
+        <div>Total: <span id="receipt-total-value"></span></div>
+        <div>Payment Method: <span id="receipt-payment-method-value"></span></div>
+        <div>Amount Paid: <span id="receipt-paid-value"></span></div>
+        <div class="is-total">Due: <span id="receipt-due-value"></span></div>
+      </div>
+      <div class="receipt-footer">Thank you for visiting us.</div>
+    </div>
+  </div>
+
   <script type="module">
     import html2canvas from 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/+esm';
     import { jsPDF } from 'https://cdn.jsdelivr.net/npm/jspdf@3.0.3/+esm';
     import { arrayUnion, collection, doc, getDoc, getDocs, increment, query, serverTimestamp, setDoc, where, writeBatch } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
     import { getDownloadURL, getMetadata, ref, uploadBytes } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js';
     import { db, storage } from './lib/firebase-init.js';
+    import {
+      ITEM_PRESET_OPTIONS,
+      PAYMENT_METHOD_OPTIONS,
+      computeBillDue,
+      computeItemsTotal,
+      getBillingItemDefaultAmounts,
+      saveBill,
+      saveBillingItemDefaultAmount
+    } from './lib/billing.js';
     const CLINIC_FIREBASE_NAMESPACE = 'clinics/__CLINIC_SHORT_NAME__';
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
@@ -976,6 +1309,7 @@
     const CLINIC_STORAGE_PREFIX = CLINIC_FIREBASE_NAMESPACE;
     const CLINIC_LOCAL_STORAGE_PREFIX = CLINIC_FIREBASE_NAMESPACE.replace(/\//g, ':');
     const clinicStorageKey = (key) => `${CLINIC_LOCAL_STORAGE_PREFIX}:${key}`;
+    const PRESCRIPTION_EDIT_WINDOW_MS = 2 * 60 * 60 * 1000;
     const STORAGE_STATS_DOC_PATH = [CLINIC_FIREBASE_NAMESPACE, 'clinicSettings', 'storageStats'];
 
     async function getExistingPdfSize(storageRef) {
@@ -1006,7 +1340,45 @@
     const rxSheet = document.getElementById('rx-sheet');
     const downloadPdfBtn = document.getElementById('download-pdf-btn');
     const printPdfBtn = document.getElementById('print-pdf-btn');
+    const addPaymentBtn = document.getElementById('add-payment-btn');
     const whatsappBtn = document.getElementById('whatsapp-btn');
+    const editPrescriptionBtn = document.getElementById('edit-prescription-btn');
+    const billModal = document.getElementById('bill-modal');
+    const billModalClose = document.getElementById('bill-modal-close');
+    const billItemsContainer = document.getElementById('bill-items-container');
+    const billItemAddBtn = document.getElementById('bill-item-add-btn');
+    const billTotalDisplay = document.getElementById('bill-total-display');
+    const billDueDisplay = document.getElementById('bill-due-display');
+    const billPaymentMethodSelect = document.getElementById('bill-payment-method');
+    const billAmountPaidInput = document.getElementById('bill-amount-paid');
+    const billErrorEl = document.getElementById('bill-error');
+    const billSaveExitBtn = document.getElementById('bill-save-exit-btn');
+    const billSavePrintBtn = document.getElementById('bill-save-print-btn');
+    let billItems = [{ description: ITEM_PRESET_OPTIONS[0], amount: '' }];
+    let lastSavedBill = null;
+    let billItemDefaultAmounts = {};
+    let billItemDefaultsLoaded = false;
+
+    async function ensureBillItemDefaultsLoaded() {
+      if (billItemDefaultsLoaded) {
+        return;
+      }
+      billItemDefaultsLoaded = true;
+      billItemDefaultAmounts = await getBillingItemDefaultAmounts().catch(() => ({}));
+    }
+
+    function getBillItemDefaultKey(item) {
+      return item.description === 'Other'
+        ? (item.customDescription || '').trim()
+        : item.description;
+    }
+
+    function applyDefaultAmountIfBlank(item) {
+      const key = getBillItemDefaultKey(item);
+      if (key && !item.amount && billItemDefaultAmounts[key]) {
+        item.amount = String(billItemDefaultAmounts[key]);
+      }
+    }
     const withHeaderBtn = document.getElementById('with-header-btn');
     const withoutHeaderBtn = document.getElementById('without-header-btn');
     const PRESCRIPTION_DRAFT_STORAGE_KEY = clinicStorageKey('prescriptionDraft');
@@ -2465,6 +2837,7 @@
         pdf,
         previewBlob,
         draftId: draft?.draftId || '',
+        editId: draft?.editId || '',
         patientId,
         childName: chartRecord?.childName || '',
         parentName: chartRecord?.parentName || '',
@@ -2480,7 +2853,10 @@
         pulse: chartRecord?.pulse || '',
         systolic: chartRecord?.systolic || '',
         diastolic: chartRecord?.diastolic || '',
-        temp: chartRecord?.temp || ''
+        temp: chartRecord?.temp || '',
+        sections: draft?.sections || {},
+        sectionDetails: draft?.sectionDetails || {},
+        medicineDetails: draft?.medicineDetails || {}
       };
     }
 
@@ -2493,6 +2869,46 @@
       if (!isValidPatientId(patientId)) {
         return { ok: false, reason: 'Select a valid patient before saving a prescription.' };
       }
+
+      const isEditingExisting = Boolean(details.editId && details.editId === saveId);
+      let originalCreatedAt = null;
+      let originalCreatedAtIso = '';
+      let originalCreatedAtDisplay = '';
+      let filteredPatientPrescriptionHistory = null;
+
+      if (isEditingExisting) {
+        try {
+          const existingSnapshot = await getDoc(doc(db, FIREBASE_COLLECTIONS.history, saveId));
+          if (!existingSnapshot.exists()) {
+            return { ok: false, reason: 'The original prescription could not be found. It may have been removed.' };
+          }
+
+          const existingData = existingSnapshot.data();
+          const existingCreatedAtMs = existingData.createdAtIso
+            ? new Date(existingData.createdAtIso).getTime()
+            : (typeof existingData.createdAt?.toMillis === 'function' ? existingData.createdAt.toMillis() : 0);
+
+          if (!existingCreatedAtMs || Date.now() - existingCreatedAtMs > PRESCRIPTION_EDIT_WINDOW_MS) {
+            return { ok: false, reason: 'The 2-hour edit window for this prescription has expired.' };
+          }
+
+          originalCreatedAt = existingData.createdAt || null;
+          originalCreatedAtIso = existingData.createdAtIso || '';
+          originalCreatedAtDisplay = existingData.createdAtDisplay || '';
+        } catch (error) {
+          return { ok: false, reason: error.message || 'Unable to verify the original prescription.' };
+        }
+
+        try {
+          const patientSnapshot = await getDoc(doc(db, FIREBASE_COLLECTIONS.patients, patientId));
+          const existingHistoryList = Array.isArray(patientSnapshot.data()?.prescriptionHistory) ? patientSnapshot.data().prescriptionHistory : [];
+          filteredPatientPrescriptionHistory = existingHistoryList.filter((item) => (item?.id || item?.prescriptionSaveId) !== saveId);
+        } catch (error) {
+          console.warn(`Unable to load patient prescription history for edit: ${error.message}`);
+          filteredPatientPrescriptionHistory = [];
+        }
+      }
+
       const storagePath = `${CLINIC_STORAGE_PREFIX}/prescriptions/${patientId}/${fileName}`;
       const previewPath = `${CLINIC_STORAGE_PREFIX}/prescription-previews/${patientId}/${saveId}.jpg`;
       let persistedStoragePath = '';
@@ -2564,6 +2980,9 @@
         systolic: details.systolic || '',
         diastolic: details.diastolic || '',
         temp: details.temp || '',
+        sections: details.sections || {},
+        sectionDetails: details.sectionDetails || {},
+        medicineDetails: details.medicineDetails || {},
         fileName,
         storagePath: persistedStoragePath,
         previewImagePath,
@@ -2571,9 +2990,14 @@
         downloadURL,
         source: 'prescription-pdf',
         type: 'prescription',
-        createdAt: serverTimestamp(),
-        createdAtIso: new Date().toISOString(),
-        createdAtDisplay: new Date().toLocaleString('en-IN')
+        createdAt: originalCreatedAt || serverTimestamp(),
+        createdAtIso: originalCreatedAtIso || new Date().toISOString(),
+        createdAtDisplay: originalCreatedAtDisplay || new Date().toLocaleString('en-IN'),
+        ...(isEditingExisting ? {
+          updatedAt: serverTimestamp(),
+          updatedAtIso: new Date().toISOString(),
+          isEdited: true
+        } : {})
       };
 
       const hasVitalsForSummary = [historyRecord.weight, historyRecord.height, historyRecord.head, historyRecord.spo2, historyRecord.pulse, historyRecord.systolic, historyRecord.diastolic, historyRecord.temp]
@@ -2594,26 +3018,31 @@
         source: 'prescription-pdf'
       };
 
+      const prescriptionHistoryEntry = {
+        id: saveId,
+        prescriptionSaveId: historyRecord.prescriptionSaveId,
+        patientId,
+        fileName,
+        storagePath: historyRecord.storagePath,
+        previewImagePath: historyRecord.previewImagePath,
+        previewImageURL: historyRecord.previewImageURL,
+        downloadURL: historyRecord.downloadURL,
+        source: historyRecord.source,
+        type: historyRecord.type,
+        createdAtIso: historyRecord.createdAtIso,
+        createdAtDisplay: historyRecord.createdAtDisplay,
+        ...(isEditingExisting ? { isEdited: true } : {})
+      };
+
       const saveBatch = writeBatch(db);
       saveBatch.set(doc(db, FIREBASE_COLLECTIONS.history, saveId), historyRecord, { merge: true });
       saveBatch.set(doc(db, FIREBASE_COLLECTIONS.patients, patientId), {
         patientId,
         childName: historyRecord.childName,
         ...(hasVitalsForSummary ? { lastMeasurementRecord } : {}),
-        prescriptionHistory: arrayUnion({
-          id: saveId,
-          prescriptionSaveId: historyRecord.prescriptionSaveId,
-          patientId,
-          fileName,
-          storagePath: historyRecord.storagePath,
-          previewImagePath: historyRecord.previewImagePath,
-          previewImageURL: historyRecord.previewImageURL,
-          downloadURL: historyRecord.downloadURL,
-          source: historyRecord.source,
-          type: historyRecord.type,
-          createdAtIso: historyRecord.createdAtIso,
-          createdAtDisplay: historyRecord.createdAtDisplay
-        }),
+        prescriptionHistory: isEditingExisting
+          ? [...(filteredPatientPrescriptionHistory || []), prescriptionHistoryEntry]
+          : arrayUnion(prescriptionHistoryEntry),
         updatedAt: serverTimestamp()
       }, { merge: true });
       await saveBatch.commit();
@@ -2640,7 +3069,7 @@
         const fallbackSaveId = window.crypto?.randomUUID
           ? `rx-${patientId}-${window.crypto.randomUUID()}`
           : `rx-${patientId}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-        const saveId = details.draftId || fallbackSaveId;
+        const saveId = details.editId || details.draftId || fallbackSaveId;
         const fileName = `${saveId}.pdf`;
         const pdfBlob = pdf.output('blob');
         builtPrescriptionRecord = { ...details, patientId, childName, phone, previewBlob, saveId, fileName, pdfBlob };
@@ -2706,6 +3135,12 @@
         };
         setPreviewStatus(saveResult.warning ? `Prescription saved. ${saveResult.warning}` : 'Prescription saved');
         clearPrescriptionLocalData();
+
+        if (editPrescriptionBtn) {
+          editPrescriptionBtn.hidden = false;
+          editPrescriptionBtn.dataset.editUrl = `prescription.html?editId=${encodeURIComponent(saveId)}&patientId=${encodeURIComponent(patientId)}`;
+        }
+
         return savedPrescriptionRecord;
       })().catch((error) => {
         prescriptionSavePromise = null;
@@ -2761,6 +3196,258 @@
         : `https://wa.me/?text=${encodedMessage}`;
       window.open(targetUrl, '_blank', 'noopener,noreferrer');
     }
+
+    function formatCurrency(amount) {
+      const value = Number(amount) || 0;
+      return `₹${value.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+    }
+
+    function getBillingPatientId() {
+      const chartRecord = getCurrentChartRecord();
+      return normalizePatientId(chartRecord?.patientId || getPatientIdFromUrl());
+    }
+
+    function renderBillItems() {
+      billItemsContainer.innerHTML = billItems.map((item, index) => `
+        <div class="bill-item-row" data-item-index="${index}">
+          <select data-field="description" data-item-index="${index}">
+            ${ITEM_PRESET_OPTIONS.map((option) => `<option value="${escapeHtml(option)}" ${item.description === option ? 'selected' : ''}>${escapeHtml(option === 'Other' ? 'Add New' : option)}</option>`).join('')}
+          </select>
+          <input type="number" min="0" step="0.01" placeholder="0.00" value="${item.amount}" data-field="amount" data-item-index="${index}">
+          <button type="button" class="bill-item-remove" data-remove-item-index="${index}" aria-label="Remove item">x</button>
+          ${item.description === 'Other' ? `<input type="text" class="bill-item-custom-input" placeholder="Enter custom item name" value="${escapeHtml(item.customDescription || '')}" data-field="customDescription" data-item-index="${index}">` : ''}
+        </div>
+      `).join('');
+    }
+
+    function updateBillTotals() {
+      const total = computeItemsTotal(billItems);
+      const amountPaid = Math.max(0, Number(billAmountPaidInput.value) || 0);
+      const due = Math.max(0, total - amountPaid);
+      billTotalDisplay.textContent = formatCurrency(total);
+      billDueDisplay.textContent = formatCurrency(due);
+    }
+
+    function resetBillForm() {
+      billItems = [{ description: ITEM_PRESET_OPTIONS[0], amount: '' }];
+      billItems.forEach(applyDefaultAmountIfBlank);
+      billPaymentMethodSelect.innerHTML = PAYMENT_METHOD_OPTIONS.map((method) => `<option value="${escapeHtml(method)}">${escapeHtml(method)}</option>`).join('');
+      billAmountPaidInput.value = '0';
+      billErrorEl.textContent = '';
+      billErrorEl.classList.remove('is-visible');
+      renderBillItems();
+      updateBillTotals();
+    }
+
+    async function openBillModal() {
+      await ensureBillItemDefaultsLoaded();
+      resetBillForm();
+      billModal.classList.add('is-open');
+      billModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeBillModal() {
+      billModal.classList.remove('is-open');
+      billModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    async function buildReceiptPdf(bill, patientId, patientName) {
+      const branding = getPrescriptionBranding();
+      document.getElementById('receipt-clinic-name').textContent = branding.clinicTitle || DEFAULT_BRANDING.clinicTitle;
+      document.getElementById('receipt-clinic-address').textContent = branding.clinicAddress || DEFAULT_BRANDING.clinicAddress;
+      document.getElementById('receipt-doctor-name').textContent = branding.doctorName || DEFAULT_BRANDING.doctorName;
+      document.getElementById('receipt-no-value').textContent = bill.receiptNo || '-';
+      document.getElementById('receipt-date-value').textContent = new Date(bill.createdAtIso || Date.now()).toLocaleDateString('en-IN');
+      document.getElementById('receipt-bill-no-value').textContent = bill.billNo || '-';
+      document.getElementById('receipt-patient-name').textContent = patientName || patientId;
+      document.getElementById('receipt-patient-id').textContent = patientId;
+      document.getElementById('receipt-items-body').innerHTML = bill.items.map((item) => `
+        <tr><td>${escapeHtml(item.description || 'Item')}</td><td>${formatCurrency(item.amount)}</td></tr>
+      `).join('');
+      document.getElementById('receipt-total-value').textContent = formatCurrency(bill.total);
+      document.getElementById('receipt-payment-method-value').textContent = bill.paymentMethod || '-';
+      document.getElementById('receipt-paid-value').textContent = formatCurrency(bill.amountPaid);
+      document.getElementById('receipt-due-value').textContent = formatCurrency(computeBillDue(bill));
+
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      const sheet = document.getElementById('receipt-sheet');
+      const scale = Math.max(2, Math.min(window.devicePixelRatio || 1, 3));
+      const canvas = await html2canvas(sheet, {
+        backgroundColor: '#ffffff',
+        scale,
+        useCORS: true,
+        logging: false
+      });
+
+      const PX_TO_MM = 25.4 / 96;
+      const pageWidthMm = sheet.offsetWidth * PX_TO_MM;
+      const pageHeightMm = sheet.offsetHeight * PX_TO_MM;
+      const pdf = new jsPDF({
+        orientation: pageHeightMm >= pageWidthMm ? 'portrait' : 'landscape',
+        unit: 'mm',
+        format: [pageWidthMm, pageHeightMm]
+      });
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, pageWidthMm, pageHeightMm, undefined, 'FAST');
+
+      const fileName = `receipt-${bill.receiptNo || bill.id}.pdf`;
+      return { pdf, fileName };
+    }
+
+    async function uploadBillReceiptLink(bill, patientId, patientName) {
+      if (!storage) {
+        return '';
+      }
+      try {
+        const { pdf, fileName } = await buildReceiptPdf(bill, patientId, patientName);
+        const pdfBlob = pdf.output('blob');
+        const storagePath = `${CLINIC_STORAGE_PREFIX}/billReceipts/${patientId}/${fileName}`;
+        const storageRef = ref(storage, storagePath);
+        await uploadBytes(storageRef, pdfBlob, {
+          contentType: 'application/pdf',
+          contentDisposition: 'inline'
+        });
+        return await getDownloadURL(storageRef);
+      } catch (error) {
+        console.warn(`Bill receipt PDF upload skipped: ${error.message}`);
+        return '';
+      }
+    }
+
+    async function submitBill({ print = false } = {}) {
+      billErrorEl.textContent = '';
+      billErrorEl.classList.remove('is-visible');
+
+      const hasValidItem = billItems.some((item) => (Number(item.amount) || 0) > 0);
+      if (!hasValidItem) {
+        billErrorEl.textContent = 'Add at least one bill item with an amount.';
+        billErrorEl.classList.add('is-visible');
+        return;
+      }
+
+      const patientId = getBillingPatientId();
+      if (!isValidPatientId(patientId)) {
+        billErrorEl.textContent = 'Select a valid patient before adding a bill.';
+        billErrorEl.classList.add('is-visible');
+        return;
+      }
+
+      const finalItems = billItems.map((item) => ({
+        description: item.description === 'Other'
+          ? (item.customDescription || '').trim() || 'Other'
+          : item.description,
+        amount: item.amount
+      }));
+
+      billSaveExitBtn.disabled = true;
+      billSavePrintBtn.disabled = true;
+
+      try {
+        const bill = await saveBill(
+          patientId,
+          finalItems,
+          billPaymentMethodSelect.value,
+          billAmountPaidInput.value
+        );
+        lastSavedBill = bill;
+
+        closeBillModal();
+
+        if (print) {
+          const chartRecord = getCurrentChartRecord();
+          const patientName = chartRecord?.patientName || chartRecord?.childName || patientId;
+          const { pdf } = await buildReceiptPdf(bill, patientId, patientName);
+          await openPdfForPrinting(pdf);
+        }
+      } catch (error) {
+        billErrorEl.textContent = error?.message || 'Unable to save this bill right now.';
+        billErrorEl.classList.add('is-visible');
+      } finally {
+        billSaveExitBtn.disabled = false;
+        billSavePrintBtn.disabled = false;
+      }
+    }
+
+    addPaymentBtn.addEventListener('click', () => {
+      openBillModal();
+    });
+
+    billModalClose.addEventListener('click', closeBillModal);
+    billModal.addEventListener('click', (event) => {
+      if (event.target === billModal) {
+        closeBillModal();
+      }
+    });
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && billModal.classList.contains('is-open')) {
+        closeBillModal();
+      }
+    });
+
+    billItemAddBtn.addEventListener('click', () => {
+      const newItem = { description: ITEM_PRESET_OPTIONS[0], amount: '' };
+      applyDefaultAmountIfBlank(newItem);
+      billItems.push(newItem);
+      renderBillItems();
+      updateBillTotals();
+    });
+
+    billItemsContainer.addEventListener('input', (event) => {
+      const target = event.target;
+      const index = Number(target.getAttribute('data-item-index'));
+      const field = target.getAttribute('data-field');
+      if (!Number.isInteger(index) || !billItems[index] || target.tagName === 'SELECT') {
+        return;
+      }
+      billItems[index][field] = target.value;
+      updateBillTotals();
+    });
+
+    billItemsContainer.addEventListener('change', (event) => {
+      const target = event.target;
+      const index = Number(target.getAttribute('data-item-index'));
+      const field = target.getAttribute('data-field');
+      if (!Number.isInteger(index) || !billItems[index] || !field) {
+        return;
+      }
+      billItems[index][field] = target.value;
+      if (field === 'description') {
+        billItems[index].amount = '';
+        applyDefaultAmountIfBlank(billItems[index]);
+        renderBillItems();
+      } else if (field === 'customDescription') {
+        applyDefaultAmountIfBlank(billItems[index]);
+        renderBillItems();
+      } else if (field === 'amount') {
+        const key = getBillItemDefaultKey(billItems[index]);
+        const amountValue = Number(target.value) || 0;
+        if (key && amountValue > 0) {
+          billItemDefaultAmounts[key] = amountValue;
+          saveBillingItemDefaultAmount(key, amountValue).catch(() => {});
+        }
+      }
+      updateBillTotals();
+    });
+
+    billItemsContainer.addEventListener('click', (event) => {
+      const removeIndex = event.target.getAttribute('data-remove-item-index');
+      if (removeIndex === null) {
+        return;
+      }
+      if (billItems.length <= 1) {
+        billItems = [{ description: ITEM_PRESET_OPTIONS[0], amount: '' }];
+      } else {
+        billItems.splice(Number(removeIndex), 1);
+      }
+      renderBillItems();
+      updateBillTotals();
+    });
+
+    billAmountPaidInput.addEventListener('input', updateBillTotals);
+    billSaveExitBtn.addEventListener('click', () => submitBill({ print: false }));
+    billSavePrintBtn.addEventListener('click', () => submitBill({ print: true }));
 
     downloadPdfBtn.addEventListener('click', async () => {
       downloadPdfBtn.disabled = true;
@@ -2818,13 +3505,22 @@
         const branding = getPrescriptionBranding();
         const prescriptionLink = buildShortPrescriptionLink(builtRecord.saveId);
         const portalLink = buildPortalLink();
+        const patientId = builtRecord.patientId || chartRecord?.patientId || '-';
+        const patientName = chartRecord?.patientName || chartRecord?.childName || 'Patient';
+
+        let billReceiptLink = '';
+        if (lastSavedBill) {
+          billReceiptLink = await uploadBillReceiptLink(lastSavedBill, patientId, patientName);
+        }
+
         const message = [
-          `Hello ${chartRecord?.patientName || chartRecord?.childName || 'Patient'},`,
+          `Hello ${patientName},`,
           '',
           `You can see your prescription PDF here:`,
           prescriptionLink,
           '',
-          `Patient ID: ${builtRecord.patientId || chartRecord?.patientId || '-'}`,
+          ...(billReceiptLink ? ['You can see your bill/payment receipt here:', billReceiptLink, ''] : []),
+          `Patient ID: ${patientId}`,
           `Clinic: ${branding.clinicTitle || DEFAULT_BRANDING.clinicTitle}`,
           '',
           `Regards,`,
@@ -2843,6 +3539,15 @@
         whatsappBtn.textContent = 'WhatsApp';
       }
     });
+
+    if (editPrescriptionBtn) {
+      editPrescriptionBtn.addEventListener('click', () => {
+        const url = editPrescriptionBtn.dataset.editUrl;
+        if (url) {
+          window.location.href = url;
+        }
+      });
+    }
 
     async function initializePreview() {
       setPreviewStatus('Preparing preview...');
