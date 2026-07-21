@@ -11,7 +11,7 @@ import {
 import { deleteObject, getDownloadURL, ref, uploadBytes } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js';
 import { db, storage } from './firebase-init.js';
 
-const CLINIC_FIREBASE_NAMESPACE = 'clinics/TEST';
+const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
 const CLINIC_STORAGE_PREFIX = CLINIC_FIREBASE_NAMESPACE;
 
 export const FILE_CATEGORIES = {

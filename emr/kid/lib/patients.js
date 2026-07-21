@@ -1,7 +1,7 @@
 import { collection, doc, getDocs, serverTimestamp, setDoc } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
 import { db } from './firebase-init.js';
 
-const CLINIC_FIREBASE_NAMESPACE = 'clinics/TEST';
+const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
 const PATIENTS_COLLECTION_PATH = `${CLINIC_FIREBASE_NAMESPACE}/patients`;
 
 export function getNormalizedPatientId(value) {

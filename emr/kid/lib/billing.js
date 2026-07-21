@@ -12,7 +12,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
 import { db } from './firebase-init.js';
 
-const CLINIC_FIREBASE_NAMESPACE = 'clinics/TEST';
+const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
 const BILLING_COUNTERS_DOC_PATH = [CLINIC_FIREBASE_NAMESPACE, 'clinicSettings', 'billingCounters'];
 const BILLING_ITEM_DEFAULTS_DOC_PATH = [CLINIC_FIREBASE_NAMESPACE, 'clinicSettings', 'billingItemDefaults'];
 const BILL_NO_PREFIX = 'Doc';
