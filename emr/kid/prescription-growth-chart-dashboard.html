@@ -2614,7 +2614,7 @@
     import { addDoc, arrayUnion, collection, deleteField, doc, getDoc, getDocs, increment, query, serverTimestamp, setDoc, where, writeBatch } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
     import { getDownloadURL, getMetadata, ref, uploadBytes } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js';
     import { db, storage } from './lib/firebase-init.js';
-    const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
+    const CLINIC_FIREBASE_NAMESPACE = 'clinics/TEST';
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
       pendingPatients: `${CLINIC_FIREBASE_NAMESPACE}/pendingPatients`,
@@ -3017,6 +3017,8 @@
     let generatedPreviewPages = [];
     let generatedPdfBase64 = '';
     let latestChartPdfUploadResult = null;
+    let chartRevealed = false;
+    let lastRenderedChartSignature = '';
     const CHART_RENDER_MAX_WIDTH = 760;
     const CHART_POINT_RADIUS = 7;
     const GROWTH_CHART_DEBUG = new URLSearchParams(window.location.search).has('growthDebug')
@@ -4086,6 +4088,8 @@
       generatedTemplates = [];
       generatedPreviewPages = [];
       generatedPdfBase64 = '';
+      chartRevealed = false;
+      lastRenderedChartSignature = '';
       updatePreview();
       renderPreviewGallery();
       drawBaseTemplate(null);
@@ -5428,10 +5432,10 @@
     function renderPreviewGallery() {
       previewGallery.innerHTML = '';
       if (chartFullscreenOpen) {
-        chartFullscreenOpen.hidden = generatedPreviewPages.length === 0;
+        chartFullscreenOpen.hidden = !chartRevealed || generatedPreviewPages.length === 0;
       }
 
-      if (generatedPreviewPages.length === 0) {
+      if (!chartRevealed || generatedPreviewPages.length === 0) {
         return;
       }
 
@@ -5533,16 +5537,27 @@
 
     async function renderGeneratedChart() {
       generatedTemplates = buildTemplateRequests();
-      generatedPdfBase64 = '';
-      latestChartPdfUploadResult = null;
 
       if (generatedTemplates.length === 0) {
+        generatedPdfBase64 = '';
+        latestChartPdfUploadResult = null;
+        lastRenderedChartSignature = '';
         setChartPreviewMessage('No matching IAP template could be selected for the entered age, gender, and chart combination.', 'warning');
         generatedPreviewPages = [];
         renderPreviewGallery();
         drawBaseTemplate(null);
         return;
       }
+
+      const signature = JSON.stringify(buildChartGenerationPayload());
+      if (signature === lastRenderedChartSignature && generatedPreviewPages.length > 0) {
+        renderPreviewGallery();
+        setChartPreviewMessage(getChartReadyMessage(), 'ready');
+        return;
+      }
+
+      generatedPdfBase64 = '';
+      latestChartPdfUploadResult = null;
 
       try {
         if (!CAN_USE_PYTHON_CHART_SERVICE) {
@@ -5558,9 +5573,12 @@
         generatedPdfBase64 = '';
         await renderCanvasFromGeneratedPreview(generatedPreviewPages[0] || null);
 
+        lastRenderedChartSignature = signature;
         setChartPreviewMessage(getChartReadyMessage(), 'ready');
         return;
       }
+
+      lastRenderedChartSignature = signature;
 
       setChartPreviewMessage(getChartReadyMessage(), 'ready');
     }
@@ -5624,7 +5642,7 @@
     }
 
     function revealActions() {
-      downloadBtn.hidden = false;
+      downloadBtn.hidden = !chartRevealed;
       statusNote.classList.add('visible');
     }
 
@@ -5647,6 +5665,34 @@
       primaryNav.classList.toggle('is-open', !isOpen);
     }
 
+    let autoChartPreviewInFlight = false;
+
+    function canAutoPreviewChart() {
+      return Boolean(
+        patientIdInput.value.trim()
+        && childNameInput.value.trim()
+        && form.elements.gender.value
+        && dobInput.value
+        && getSelectedCharts().length > 0
+      );
+    }
+
+    async function maybeAutoPreviewChart() {
+      if (autoChartPreviewInFlight || generateBtn.textContent.trim() === 'Continue' || !canAutoPreviewChart()) {
+        return;
+      }
+
+      autoChartPreviewInFlight = true;
+
+      try {
+        await renderGeneratedChart();
+      } catch (error) {
+        setChartPreviewMessage(`Unable to preview chart: ${error.message}`, 'warning');
+      } finally {
+        autoChartPreviewInFlight = false;
+      }
+    }
+
     Object.values(metricInputs).forEach((input) => {
       input.addEventListener('input', () => {
         updatePreview();
@@ -5655,6 +5701,10 @@
       input.addEventListener('change', () => {
         updatePreview();
         saveVitalsDraft();
+        maybeAutoPreviewChart();
+      });
+      input.addEventListener('blur', () => {
+        maybeAutoPreviewChart();
       });
     });
     if (metricHistoryMasterToggle) {
@@ -5926,10 +5976,12 @@
       generateBtn.textContent = 'Making Chart...';
       statusNote.textContent = 'Chart is being prepared. Please wait...';
       statusNote.classList.add('visible');
-      revealActions();
+      chartRevealed = true;
       await renderGeneratedChart();
+      revealActions();
 
       if (generatedPreviewPages.length === 0) {
+        chartRevealed = false;
         statusNote.textContent = 'No charts were generated, so nothing was saved to history.';
         statusNote.classList.add('visible');
         generateBtn.disabled = false;

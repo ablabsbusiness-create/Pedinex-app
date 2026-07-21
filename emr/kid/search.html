@@ -1332,8 +1332,21 @@
     .record-table {
       width: 100%;
       min-width: 100%;
+      table-layout: fixed;
       border-collapse: separate;
       border-spacing: 4px;
+    }
+
+    .record-table .metric-name-col {
+      width: 70px;
+    }
+
+    .record-table .metric-unit-col {
+      width: 34px;
+    }
+
+    .record-table .metric-value-col {
+      width: calc((100% - 104px) / var(--history-entry-count, 1));
     }
 
     .record-table th,
@@ -1667,6 +1680,23 @@
       box-shadow: 0 10px 22px rgba(5, 18, 11, 0.16);
     }
 
+    .prescription-preview-edit-chip {
+      position: static;
+      justify-self: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: #fff;
+      color: #146c34;
+      border: 1.5px solid #146c34;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
     .pdf-preview-modal {
       position: fixed;
       inset: 0;
@@ -1984,7 +2014,8 @@
       }
 
       .prescription-date,
-      .prescription-preview-open-chip {
+      .prescription-preview-open-chip,
+      .prescription-preview-edit-chip {
         width: 100%;
         max-width: calc(100vw - 48px);
         min-height: 38px;
@@ -2060,11 +2091,20 @@
     </div>
   </div>
 
+  <script>
+    if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});
+    }
+  </script>
+
   <script type="module">
     import { collection, doc, getDocs, limit, orderBy, query, serverTimestamp, setDoc, where } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js';
     import { getDownloadURL, getMetadata, listAll, ref } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js';
     import { db, storage } from './lib/firebase-init.js';
-    const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
+    import { PrescriptionLazyLoader } from './lib/lazy-load.js';
+    import { startPerfMonitor, markAppTiming } from './lib/perf-monitor.js';
+    startPerfMonitor(document.title);
+    const CLINIC_FIREBASE_NAMESPACE = 'clinics/TEST';
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
       pendingPatients: `${CLINIC_FIREBASE_NAMESPACE}/pendingPatients`,
@@ -2110,6 +2150,7 @@
     const historyDateFilters = {};
     const historyShowAll = {};
     const historyPageIndexes = {};
+    const prescriptionLazyLoader = new PrescriptionLazyLoader({ preloadMargin: '200px', maxConcurrentLoads: 4 });
     const IS_PATIENT_DETAILS_PAGE = window.location.pathname.includes('/patient-details');
     document.body.classList.toggle('patient-details-page', IS_PATIENT_DETAILS_PAGE);
     const MOBILE_DETAIL_QUERY = window.matchMedia('(max-width: 640px)');
@@ -3126,15 +3167,24 @@
         ...resultsPanel.querySelectorAll('.prescription-preview-frame[data-preview-image-url]'),
         ...resultsPanel.querySelectorAll('.prescription-preview-embed[data-preview-pdf-url]')
       ];
+
+      prescriptionLazyLoader.disconnect();
+
       if (!previewElements.length) {
         return;
       }
 
-      previewElements.forEach((previewElement) => {
+      previewElements.forEach((previewElement, index) => {
+        previewElement.dataset.prescriptionId = previewElement.dataset.previewImageUrl || previewElement.dataset.previewPdfUrl || `preview-${index}`;
+
         if (previewElement instanceof HTMLImageElement) {
-          renderPrescriptionPreviewImage(previewElement);
+          prescriptionLazyLoader.observe(previewElement, async () => {
+            renderPrescriptionPreviewImage(previewElement);
+          });
         } else if (previewElement instanceof HTMLIFrameElement) {
-          renderPrescriptionPreviewPdf(previewElement);
+          prescriptionLazyLoader.observe(previewElement, async () => {
+            renderPrescriptionPreviewPdf(previewElement);
+          });
         }
       });
     }
@@ -3690,7 +3740,7 @@
       const seenPatientIds = new Set();
 
       patientRecords.forEach((patient) => {
-        if (patient.status === 'pending' || patient.status === 'rejected') {
+        if (patient.status === 'pending' || patient.status === 'rejected' || patient.status === 'merged') {
           return;
         }
         const patientId = getNormalizedPatientId(patient.patientId);
@@ -3988,6 +4038,11 @@
         </div>
         <div class="record-table-wrap">
           <table class="record-table" style="--history-entry-count: ${Math.max(filteredEntries.length, 1)};">
+            <colgroup>
+              <col class="metric-name-col">
+              <col class="metric-unit-col">
+              ${filteredEntries.map(() => `<col class="metric-value-col">`).join('')}
+            </colgroup>
             <thead>
               <tr>
                 <th></th>
@@ -4028,6 +4083,37 @@
           </table>
         </div>
       `;
+    }
+
+    const PRESCRIPTION_EDIT_WINDOW_MS = 2 * 60 * 60 * 1000;
+
+    function getPrescriptionEntryCreatedAtMs(entry) {
+      const iso = entry?.createdAtIso;
+      if (iso) {
+        const parsed = new Date(iso).getTime();
+        if (!Number.isNaN(parsed)) {
+          return parsed;
+        }
+      }
+
+      const timestamp = entry?.createdAt;
+      if (timestamp && typeof timestamp.toMillis === 'function') {
+        return timestamp.toMillis();
+      }
+
+      return 0;
+    }
+
+    function isPrescriptionEditable(entry) {
+      const createdAtMs = getPrescriptionEntryCreatedAtMs(entry);
+      return Boolean(createdAtMs) && (Date.now() - createdAtMs) <= PRESCRIPTION_EDIT_WINDOW_MS;
+    }
+
+    function getPrescriptionEditUrl(entry) {
+      const params = new URLSearchParams();
+      params.set('editId', entry?.prescriptionSaveId || entry?.id || '');
+      params.set('patientId', entry?.patientId || '');
+      return `prescription.html?${params.toString()}`;
     }
 
     function formatPrescriptionDate(entry) {
@@ -4204,6 +4290,10 @@
               const storagePath = getPrescriptionStoragePath(entry);
               const hasResolvablePdf = Boolean(downloadUrl || storagePath);
               const waitingForStorageUrl = Boolean(!downloadUrl && storagePath);
+              const storageLookupPending = !storagePrescriptionPatientIdsLoaded.has(getNormalizedPatientId(patientId));
+              const editChipHtml = isPrescriptionEditable(entry)
+                ? `<a class="prescription-preview-edit-chip" href="${escapeHtml(getPrescriptionEditUrl(entry))}">Edit</a>`
+                : '';
 
               return `
                 <div class="prescription-preview-entry">
@@ -4217,6 +4307,7 @@
                         </div>
                       </div>
                       ${downloadUrl ? `<a class="prescription-preview-open-chip" href="${cardUrl}" target="_blank" rel="noopener noreferrer">Open prescription</a>` : ''}
+                      ${editChipHtml}
                     `
                     : `
                       <div class="prescription-preview-card" data-open-prescription-url="${cardUrl}" data-preview-image-url="${cardPreviewUrl}">
@@ -4230,10 +4321,13 @@
                               ? '<div class="prescription-preview-placeholder is-static">Loading prescription PDF...</div>'
                               : hasResolvablePdf
                                 ? '<div class="prescription-preview-placeholder is-static">Prescription PDF</div>'
-                                : '<div class="prescription-preview-placeholder is-error">Prescription PDF could not be loaded for this record.</div>'}
+                                : storageLookupPending
+                                  ? '<div class="prescription-preview-placeholder is-static">Checking for prescription PDF...</div>'
+                                  : '<div class="prescription-preview-placeholder is-error">Prescription PDF could not be loaded for this record.</div>'}
                         </div>
                       </div>
                       ${downloadUrl ? `<a class="prescription-preview-open-chip" href="${cardUrl}" target="_blank" rel="noopener noreferrer">Open prescription</a>` : ''}
+                      ${editChipHtml}
                     `}
                 </div>
               `;
@@ -4453,6 +4547,7 @@
                   ${parentName ? `<span class="doctor-meta-chip">${parentName}</span>` : ''}
                   ${phone ? `<span class="doctor-meta-chip">${phone}</span>` : ''}
                   <a class="continue-link" href="/vaccination?patientId=${encodeURIComponent(selectedPatientIdValue)}">Vaccination</a>
+                  <a class="continue-link" href="/patient-details?patientId=${encodeURIComponent(selectedPatientIdValue)}">Payments</a>
                   <a class="continue-link" href="/certificates?patientId=${encodeURIComponent(selectedPatientIdValue)}">Certificates</a>
                   <a class="continue-link" href="/prescription-growth-chart-dashboard?patientId=${encodeURIComponent(selectedPatientIdValue)}">Start Consult</a>
                 </div>
@@ -4515,7 +4610,9 @@
         selectedPatientId = '';
       }
 
+      const finishRenderTiming = markAppTiming('worklist render');
       renderDoctorWorklist(filteredPatients, searchValue);
+      finishRenderTiming();
       setStatus(searchValue ? `Showing matches for "${searchValue}".` : 'Showing all patients.');
     }
 
@@ -4605,6 +4702,53 @@
         }
         selectedPatientId = selectedWorklistPatientId;
         filterPatients();
+      }
+    });
+
+    const worklistHoverPrefetchTimers = new Map();
+
+    resultsPanel.addEventListener('mouseover', (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) {
+        return;
+      }
+
+      const hoveredPatientId = target.closest('[data-select-worklist-patient]')?.getAttribute('data-select-worklist-patient');
+      if (!hoveredPatientId || worklistHoverPrefetchTimers.has(hoveredPatientId)) {
+        return;
+      }
+
+      const timer = window.setTimeout(() => {
+        worklistHoverPrefetchTimers.delete(hoveredPatientId);
+        const patient = allPatients.find((candidate) => formatVisiblePatientId(candidate.patientId || candidate.id) === hoveredPatientId);
+        if (patient) {
+          ensureStoragePrescriptionsForPatient(patient);
+          ensureFullHistoryForPatient(patient);
+        }
+      }, 150);
+
+      worklistHoverPrefetchTimers.set(hoveredPatientId, timer);
+    });
+
+    resultsPanel.addEventListener('mouseout', (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) {
+        return;
+      }
+
+      const leftPatientId = target.closest('[data-select-worklist-patient]')?.getAttribute('data-select-worklist-patient');
+      const relatedPatientId = event.relatedTarget instanceof HTMLElement
+        ? event.relatedTarget.closest('[data-select-worklist-patient]')?.getAttribute('data-select-worklist-patient')
+        : null;
+
+      if (!leftPatientId || leftPatientId === relatedPatientId) {
+        return;
+      }
+
+      const timer = worklistHoverPrefetchTimers.get(leftPatientId);
+      if (timer) {
+        window.clearTimeout(timer);
+        worklistHoverPrefetchTimers.delete(leftPatientId);
       }
     });
 

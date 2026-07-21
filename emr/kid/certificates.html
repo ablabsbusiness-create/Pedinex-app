@@ -433,6 +433,7 @@
       gap: 10px;
       padding: 10px;
       margin-top: 18px;
+      margin-bottom: 18px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(10px);
@@ -664,7 +665,7 @@
     import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js';
     import { db, storage } from './lib/firebase-init.js';
 
-    const CLINIC_FIREBASE_NAMESPACE = 'clinics/kid';
+    const CLINIC_FIREBASE_NAMESPACE = 'clinics/TEST';
     const FIREBASE_COLLECTIONS = {
       patients: `${CLINIC_FIREBASE_NAMESPACE}/patients`,
       certificates: `${CLINIC_FIREBASE_NAMESPACE}/certificates`,
