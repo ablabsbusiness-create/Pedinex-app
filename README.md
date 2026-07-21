@@ -20,7 +20,7 @@ own `package.json` and is built/deployed independently.
 cd emr/kid
 npm install
 npm run dev
-```
+``` 
 
 Local dev needs a `.env` file (copy `.env.example` and fill in the Firebase
 values + `CLINIC_ACCESS_PASSWORD` / `CLINIC_SESSION_SECRET`) if one isn't
