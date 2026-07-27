@@ -1304,7 +1304,6 @@
         <a href="#print-settings">Print</a>
         <a href="#prescription-layout-settings">Prescription Layout</a>
         <a href="#branding-settings">Branding</a>
-        <a href="#account-settings">Account</a>
       </nav>
 
       <div class="stats-grid">
@@ -1515,17 +1514,6 @@
           </div>
         </article>
       </div>
-
-      <div id="account-settings" class="settings-divider">Account</div>
-      <div class="account-card">
-        <div class="account-card-title">
-          <div>
-            <strong>Clinic session</strong>
-            <span>Sign out from this device when the clinic work is finished.</span>
-          </div>
-        </div>
-        <button id="sign-out-btn" class="setting-save" type="button">Sign Out</button>
-      </div>
     </section>
   </main>
 
@@ -1585,7 +1573,6 @@
     const growthChartStandardSelect = document.getElementById('growth-chart-standard-select');
     const saveGrowthChartStandardBtn = document.getElementById('save-growth-chart-standard-btn');
     const growthChartStandardStatus = document.getElementById('growth-chart-standard-status');
-    const signOutBtn = document.getElementById('sign-out-btn');
     const printGapSettingStatus = document.getElementById('print-gap-setting-status');
     const clinicTitleInput = document.getElementById('clinic-title-input');
     const clinicAddressInput = document.getElementById('clinic-address-input');
@@ -1634,7 +1621,6 @@
     const CLINIC_DOC_PATH = CLINIC_FIREBASE_NAMESPACE.split('/');
     const PRESCRIPTION_BRANDING_DOC_PATH = [CLINIC_FIREBASE_NAMESPACE, 'clinicSettings', 'prescriptionBranding'];
     const CLINIC_SETTINGS_DOC_PATH = [CLINIC_FIREBASE_NAMESPACE, 'clinicSettings', 'settings'];
-    const ACCESS_COOKIE_NAME = 'clinic_session';
     const DEFAULT_BRANDING = {
       sectionTitle: 'Prescription Header, Footer & Signature',
       sectionDescription: 'Set the clinic text and doctor signature used on prescription preview, print, and saved PDF.',
@@ -2375,26 +2361,6 @@
         } finally {
           resetBrandingBtn.disabled = false;
         }
-      });
-    }
-
-    if (signOutBtn) {
-      signOutBtn.addEventListener('click', async () => {
-        signOutBtn.disabled = true;
-
-        try {
-          await fetch('/api/auth/logout', { method: 'POST' });
-        } catch (error) {
-          console.warn('Unable to call logout endpoint:', error);
-        }
-
-        document.cookie = `${ACCESS_COOKIE_NAME}=; Max-Age=0; Path=/; SameSite=Strict`;
-
-        const passwordPath = window.location.pathname.startsWith('/')
-          ? '/password.html'
-          : '/password';
-
-        window.location.replace(passwordPath);
       });
     }
 

@@ -10,6 +10,29 @@ This copy still contains `__TOKEN__` placeholders instead of real clinic
 branding. Follow the steps below in order to turn it into a working clinic
 deployment.
 
+## Quickstart (recommended)
+
+```bash
+npm install
+npm run quickstart
+```
+
+`quickstart` walks you through everything in one pass: clinic branding, the
+staff login password, session secrets (generated for you — no separate
+`node -e` command needed), and Firebase / MSG91 config. If you have the
+[Firebase CLI](https://firebase.google.com/docs/cli) installed and already
+logged in, it can also pull your Firebase web app config automatically and
+deploy the security rules for you, instead of copy-pasting values out of the
+console. It writes `.env` directly, so there's no separate "copy
+`.env.example`" step.
+
+What it can't do for you: creating the Firebase project itself (still a few
+clicks in the console — see step 4 below) and signing up for MSG91 (a
+third-party account, step 7). Everything else in this README is either
+handled by `quickstart` or is here for people who want to do it step by step
+instead (`npm run setup` / `npm run apply-branding` for branding only, see
+step 3).
+
 ## 1. Copy this folder
 
 Copy this `template` folder to its own location — either a new folder in this
@@ -46,6 +69,9 @@ This does the same placeholder replacement but reads from that single file
 instead of asking questions — useful if you want to see/edit every value in
 one place, or re-apply after changing one later. Both approaches are
 interchangeable; use whichever is more convenient.
+
+(`npm run quickstart` does this step for you too, along with everything
+through step 6 below, in one pass.)
 
 ## 4. Create a Firebase project
 
@@ -130,8 +156,10 @@ Or, if you use the [Firebase CLI](https://firebase.google.com/docs/cli):
 firebase deploy --only firestore:rules,storage:rules --project <your-firebase-project-id>
 ```
 
-(This requires a `firebase.json` pointing at these rule files and
-`firebase login` first — the Console method above needs neither.)
+(This uses the `firebase.json` already included in this folder, and needs
+`firebase login` first — the Console method above needs neither. `npm run
+quickstart` can run this command for you at the end of setup if you have the
+CLI installed.)
 
 Without these rules published, Firestore/Storage fall back to their default
 "all access denied" mode and the app won't be able to read or write any
@@ -160,6 +188,9 @@ Fill in:
   ```
 
   Run it twice and use a different value for each secret.
+
+(`npm run quickstart` does all of this for you — it writes `.env` directly
+and generates both secrets automatically.)
 
 ## 7. Set up MSG91 (patient portal phone OTP login)
 
@@ -207,7 +238,8 @@ run when served by Vercel — use `vercel dev` (from the Vercel CLI) instead of
    `FIREBASE_STORAGE_BUCKET`, `FIREBASE_SERVICE_ACCOUNT_KEY`,
    `CLINIC_ACCESS_PASSWORD`, `CLINIC_SESSION_SECRET`,
    `PATIENT_SESSION_SECRET`, and the MSG91 variables if you're using the
-   patient portal).
+   patient portal). Or run `npm run vercel:env` after `vercel link` to push
+   your `.env` values into the linked project automatically.
 5. Build command: `npm run build`. Output directory: `dist`. (Both are also
    already set in `vercel.json`.)
 6. Deploy.
@@ -235,11 +267,17 @@ After the first deploy, verify:
   routes.
 - `firebase/firestore.rules` and `firebase/storage.rules` are the security
   rules from step 5, scoped to this clinic's own `clinics/__CLINIC_SHORT_NAME__`
-  namespace. They are not deployed automatically — you publish them to your
-  Firebase project by hand or via the Firebase CLI.
-- `scripts/setup-template.js` is the branding script from step 3.
-  `scripts/ensure-iap-assets.mjs` and `scripts/render_growth_charts.py` are
-  used at build/dev time to prepare growth chart assets — leave these as-is.
+  namespace. They are not deployed automatically unless you use `npm run
+  quickstart` with the Firebase CLI available — otherwise you publish them
+  to your Firebase project by hand or via the Firebase CLI.
+- `scripts/quickstart.js` is the one-command setup from the top of this
+  README. `scripts/setup-template.js` / `scripts/apply-branding.js` are the
+  branding-only alternatives from step 3, and share their placeholder-
+  replacement logic with `scripts/lib/replace-tokens.mjs`.
+  `scripts/push-vercel-env.js` pushes `.env` into a linked Vercel project
+  (step 9). `scripts/ensure-iap-assets.mjs` and
+  `scripts/render_growth_charts.py` are used at build/dev time to prepare
+  growth chart assets — leave these as-is.
 - The original copy of this app (`emr/kid`) shipped with a set of one-off
   data-migration scripts (CSV import, legacy ID reassignment, dedupe, etc.)
   tied to that clinic's existing patient data and production Firebase

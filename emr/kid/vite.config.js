@@ -4,16 +4,11 @@ import { cpSync, existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import {
   buildClearedSessionCookie,
-  buildLoginRedirect,
   buildSessionCookie,
   createSessionToken,
   getAccessPassword,
-  getDefaultProtectedPath,
   isAuthConfigured,
-  isAuthenticatedCookieHeader,
-  isProtectedPath,
-  normalizeAppPath,
-  shouldUseAppBase
+  normalizeAppPath
 } from './lib/auth.js';
 
 const repoRoot = resolve(__dirname, '..', '..');
@@ -127,7 +122,6 @@ export default defineConfig({
           void (async () => {
             const requestUrl = new URL(req.url || '/', 'http://localhost');
             const normalizedPath = normalizeAppPath(requestUrl.pathname);
-            const authenticated = await isAuthenticatedCookieHeader(req.headers.cookie || '');
 
             if (normalizedPath === '/api/auth/login') {
               if (req.method !== 'POST') {
@@ -176,25 +170,6 @@ export default defineConfig({
               return;
             }
 
-            if (normalizedPath === '/password') {
-              if (authenticated) {
-                res.statusCode = 302;
-                res.setHeader('Location', getDefaultProtectedPath(shouldUseAppBase(requestUrl.pathname)));
-                res.end();
-                return;
-              }
-
-              next();
-              return;
-            }
-
-            if (isProtectedPath(requestUrl.pathname) && !authenticated) {
-              res.statusCode = 302;
-              res.setHeader('Location', buildLoginRedirect(requestUrl.pathname, requestUrl.search));
-              res.end();
-              return;
-            }
-
             next();
           })().catch((error) => {
             sendJson(res, 500, { error: error.message || 'Authentication middleware failed.' });
@@ -207,13 +182,6 @@ export default defineConfig({
       configureServer(server) {
         server.middlewares.use('/api/growth_charts', (req, res) => {
           void (async () => {
-            const authenticated = await isAuthenticatedCookieHeader(req.headers.cookie || '');
-
-            if (!authenticated) {
-              sendJson(res, 401, { error: 'Authentication required.' });
-              return;
-            }
-
             if (req.method === 'OPTIONS') {
               res.statusCode = 204;
               res.end();

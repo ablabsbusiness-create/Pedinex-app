@@ -2,7 +2,7 @@
   "name": "PediaNex EMR",
   "short_name": "TEST",
   "description": "Standalone EMR web app for PediaNex pediatric workflows.",
-  "start_url": "/password.html",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui", "browser"],

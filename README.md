@@ -29,103 +29,50 @@ already present. See `emr/kid/README.md` for the full deploy checklist
 
 ## Onboarding a brand-new clinic (from `emr/template`)
 
-1. Copy the template to a new folder, e.g.:
+1. Copy the template to a new folder, then install and quickstart it:
 
    ```bash
    cp -r emr/template emr/<new-clinic-slug>
    cd emr/<new-clinic-slug>
    npm install
+   npm run quickstart
    ```
 
-2. Fill in the clinic's branding (replaces `__CLINIC_NAME__`,
-   `__DOCTOR_NAME__`, etc. placeholders across the app):
+   `quickstart` asks for the clinic's branding, staff login password, and
+   Firebase / MSG91 config in one pass, generates the session secrets for
+   you, and writes `.env` directly — no more manually running `npm run
+   setup`, copying `.env.example`, or generating secrets by hand. If the
+   Firebase CLI is installed and logged in, it can also pull the Firebase
+   web app config automatically and deploy the security rules for you.
 
-   ```bash
-   npm run setup
-   ```
+2. The only parts `quickstart` can't do for you:
+   - **Create the Firebase project** at
+     [console.firebase.google.com](https://console.firebase.google.com)
+     (enable Authentication, Firestore, and Storage) — quickstart will ask
+     for the project ID/app once it exists.
+   - **Sign up for MSG91** (third-party account) if the clinic uses
+     phone-OTP patient portal login — quickstart will ask for the widget
+     credentials once you have them.
+   - **Publishing the security rules**, if you skip the CLI-assisted step
+     during quickstart — paste `firebase/firestore.rules` and
+     `firebase/storage.rules` into the Firebase Console (Firestore
+     Database > **Rules**, and Storage > **Rules**) and publish. Without
+     these published, Firestore/Storage default to deny-all and the app
+     can't read or write any data.
 
-3. Create a new Firebase project at
-   [console.firebase.google.com](https://console.firebase.google.com):
-   enable Authentication, Firestore, and Storage, then copy the web app
-   config values.
-
-4. Publish the Firestore and Storage security rules. `npm run setup` (step
-   2) already replaced `__CLINIC_SHORT_NAME__` in
-   `emr/<new-clinic-slug>/firebase/firestore.rules` and `.../storage.rules`
-   with the clinic's short code. Paste each file's contents into the
-   Firebase Console (Firestore Database > **Rules**, and Storage >
-   **Rules**) and publish:
-
-   **`firestore.rules`:**
-
-   ```
-   rules_version = '2';
-
-   service cloud.firestore {
-     match /databases/{database}/documents {
-       match /clinics/__CLINIC_SHORT_NAME__ {
-         allow read, write: if true;
-       }
-
-       match /clinics/__CLINIC_SHORT_NAME__/{document=**} {
-         allow read, write: if true;
-       }
-
-       match /{document=**} {
-         allow read, write: if false;
-       }
-     }
-   }
-   ```
-
-   **`storage.rules`:**
-
-   ```
-   rules_version = '2';
-
-   service firebase.storage {
-     match /b/{bucket}/o {
-       match /clinics/__CLINIC_SHORT_NAME__/{allPaths=**} {
-         allow read, write: if true;
-       }
-
-       match /{allPaths=**} {
-         allow read, write: if false;
-       }
-     }
-   }
-   ```
-
-   Without these published, Firestore/Storage default to deny-all and the
-   app can't read or write any data.
-
-5. Create `.env` from `.env.example` in the new folder and fill in:
-   - `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`,
-     `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`,
-     `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`,
-     `VITE_FIREBASE_MEASUREMENT_ID`
-   - `CLINIC_ACCESS_PASSWORD` (the real clinic login password)
-   - `CLINIC_SESSION_SECRET` — generate one with:
-
-     ```bash
-     node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-     ```
-   - MSG91 OTP vars if the clinic uses phone-OTP patient login (see
-     `emr/<new-clinic-slug>/README.md` for details, only needed if MSG91
-     is actually wired up).
-
-6. Run it locally:
+3. Run it locally:
 
    ```bash
    npm run dev
    ```
 
-7. Deploy: create a **new** Vercel project, set the Root Directory to
+4. Deploy: create a **new** Vercel project, set the Root Directory to
    `emr/<new-clinic-slug>`, set build command `npm run build` and output
-   directory `dist`, and add all the env vars from step 5 in the Vercel
-   project settings.
+   directory `dist`, and add the env vars from `.env` in the Vercel project
+   settings (or run `npm run vercel:env` after `vercel link` to push them
+   automatically).
 
-8. Post-deploy smoke test: log into the patient portal, add a test patient,
+5. Post-deploy smoke test: log into the patient portal, add a test patient,
    generate a prescription/certificate PDF, and check the growth chart
    renders.
 

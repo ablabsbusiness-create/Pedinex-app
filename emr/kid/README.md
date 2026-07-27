@@ -81,9 +81,12 @@ Environment Variables:
 - `FIREBASE_PROJECT_ID`, `FIREBASE_STORAGE_BUCKET`,
   `FIREBASE_SERVICE_ACCOUNT_KEY` — used server-side by `/api` routes via the
   Firebase Admin SDK.
-- `CLINIC_ACCESS_PASSWORD` — the staff login password for `/password`.
+- `CLINIC_ACCESS_PASSWORD` — unused. The clinic password gate has been
+  removed from this app; the staff pages are open.
 - `CLINIC_SESSION_SECRET`, `PATIENT_SESSION_SECRET` — long random secrets
-  signing the staff and patient session cookies. Generate with:
+  signing the staff and patient session cookies. Only
+  `PATIENT_SESSION_SECRET` still matters (patient portal OTP). Generate
+  with:
   ```bash
   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
   ```
@@ -100,9 +103,8 @@ npm install
 npm run dev
 ```
 
-Starts Vite at `http://localhost:5173`. The staff login (`/api/auth/login`,
-`/api/auth/logout`) is emulated by a Vite dev-server plugin and works out of
-the box. `/api/otp` and `/api/patients` are real Vercel serverless functions
+Starts Vite at `http://localhost:5173`. Staff pages open without a login.
+`/api/otp` and `/api/patients` are real Vercel serverless functions
 and only run when served by Vercel — use `vercel dev` instead of `vite dev`
 if you need to exercise the OTP flow or patient-ID allocation locally.
 
@@ -122,7 +124,7 @@ Desktop `.bat` shortcuts for this repo:
 
 ## Post-deploy checklist
 
-- [ ] Staff login at `/password` works with `CLINIC_ACCESS_PASSWORD`.
+- [ ] `/` opens the dashboard directly, with no password prompt.
 - [ ] Patient records load on `/search` without a "Missing or insufficient
       permissions" error (confirms Firestore rules are published correctly).
 - [ ] Patient portal login at `/portal` sends and verifies an OTP (if MSG91
@@ -133,7 +135,7 @@ Desktop `.bat` shortcuts for this repo:
       and a certificate PDF from `/certificates`.
 - [ ] Growth chart rendering (WHO / IAP curves) displays correctly for a test
       patient with a couple of measurements.
-- [ ] No page still shows a raw `__TOKEN__` placeholder (check `/password`,
+- [ ] No page still shows a raw `__TOKEN__` placeholder (check `/`,
       `/search`, `/settings` at minimum).
 
 ## Known issues already fixed (for reference)

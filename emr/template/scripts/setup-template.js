@@ -1,28 +1,22 @@
 #!/usr/bin/env node
 /**
- * Interactive setup script for the EMR template.
+ * Interactive branding-only setup script for the EMR template.
  *
  * Prompts for clinic branding details and replaces every `__TOKEN__`
  * placeholder found in this project's files with the supplied value.
+ * Most people should use `npm run quickstart` instead — it covers this
+ * plus the .env file, secrets, and Firebase config in one pass. Use this
+ * script directly only if you want branding alone.
  *
  * Plain Node.js only — no new dependencies (uses `readline` and `fs`).
  */
 
 import { createInterface } from 'node:readline/promises';
 import { stdin, stdout } from 'node:process';
-import { readdirSync, statSync, readFileSync, writeFileSync } from 'node:fs';
-import { join, extname } from 'node:path';
+import { join } from 'node:path';
+import { applyReplacements } from './lib/replace-tokens.mjs';
 
 const projectRoot = join(import.meta.dirname, '..');
-
-// Directories to never walk into.
-const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', '.vercel']);
-
-// Binary / asset file extensions to never open as text.
-const BINARY_EXTENSIONS = new Set([
-  '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp', '.avif',
-  '.woff', '.woff2', '.ttf', '.eot', '.pdf', '.zip'
-]);
 
 const QUESTIONS = [
   { key: 'CLINIC_NAME', prompt: 'Clinic name (e.g. "Sunrise Pediatric Clinic"): ' },
@@ -54,77 +48,6 @@ async function promptAnswers() {
   return answers;
 }
 
-function walk(dir, files = []) {
-  for (const entry of readdirSync(dir)) {
-    if (SKIP_DIRS.has(entry)) {
-      continue;
-    }
-
-    const fullPath = join(dir, entry);
-    const stats = statSync(fullPath);
-
-    if (stats.isDirectory()) {
-      walk(fullPath, files);
-      continue;
-    }
-
-    if (BINARY_EXTENSIONS.has(extname(entry).toLowerCase())) {
-      continue;
-    }
-
-    // Never rewrite this script itself mid-run.
-    if (fullPath === import.meta.filename) {
-      continue;
-    }
-
-    files.push(fullPath);
-  }
-
-  return files;
-}
-
-function applyReplacements(answers) {
-  const files = walk(projectRoot);
-  const tokenPattern = new RegExp(
-    Object.keys(answers)
-      .map((key) => `__${key}__`)
-      .join('|'),
-    'g'
-  );
-
-  let filesChanged = 0;
-  let replacementsMade = 0;
-
-  for (const filePath of files) {
-    let content;
-
-    try {
-      content = readFileSync(filePath, 'utf-8');
-    } catch {
-      continue; // Skip unreadable files.
-    }
-
-    if (!content.includes('__') || !tokenPattern.test(content)) {
-      continue;
-    }
-
-    tokenPattern.lastIndex = 0;
-
-    const updated = content.replace(tokenPattern, (match) => {
-      const key = match.slice(2, -2);
-      replacementsMade += 1;
-      return answers[key] ?? match;
-    });
-
-    if (updated !== content) {
-      writeFileSync(filePath, updated, 'utf-8');
-      filesChanged += 1;
-    }
-  }
-
-  return { filesChanged, replacementsMade };
-}
-
 function printNextSteps() {
   console.log('\nNext steps');
   console.log('==========');
@@ -135,7 +58,7 @@ function printNextSteps() {
   console.log('   - Register a Web App and copy the firebaseConfig values.');
   console.log('2. Publish the security rules in firebase/firestore.rules and');
   console.log('   firebase/storage.rules to your Firebase project (Console > Firestore');
-  console.log('   Database > Rules, and Console > Storage > Rules). The __CLINIC_SHORT_NAME__');
+  console.log('   Database > Rules, and Console > Storage > Rules). The clinic-short-name');
   console.log('   placeholder in both files has already been replaced by this script.');
   console.log('3. Copy .env.example to .env and fill in the VITE_FIREBASE_* values plus');
   console.log('   CLINIC_ACCESS_PASSWORD and CLINIC_SESSION_SECRET.');
@@ -154,7 +77,8 @@ function printNextSteps() {
 
 async function main() {
   const answers = await promptAnswers();
-  const { filesChanged, replacementsMade } = applyReplacements(answers);
+  const skipFiles = new Set([import.meta.filename]);
+  const { filesChanged, replacementsMade } = applyReplacements(projectRoot, answers, skipFiles);
 
   console.log(`\nDone. Replaced ${replacementsMade} placeholder occurrence(s) across ${filesChanged} file(s).`);
   printNextSteps();

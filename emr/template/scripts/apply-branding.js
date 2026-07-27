@@ -10,19 +10,13 @@
  * Plain Node.js only -- no new dependencies.
  */
 
-import { readdirSync, statSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { join, extname } from 'node:path';
+import { readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { applyReplacements } from './lib/replace-tokens.mjs';
 
 const projectRoot = join(import.meta.dirname, '..');
 const brandingFile = join(projectRoot, 'clinic-branding.env');
 const brandingExampleFile = join(projectRoot, 'clinic-branding.env.example');
-
-const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', '.vercel', '.impeccable', 'migration-logs']);
-
-const BINARY_EXTENSIONS = new Set([
-  '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp', '.avif',
-  '.woff', '.woff2', '.ttf', '.eot', '.pdf', '.zip'
-]);
 
 function parseEnvFile(path) {
   const content = readFileSync(path, 'utf-8');
@@ -47,78 +41,6 @@ function parseEnvFile(path) {
   return answers;
 }
 
-function walk(dir, files = []) {
-  for (const entry of readdirSync(dir)) {
-    if (SKIP_DIRS.has(entry)) {
-      continue;
-    }
-
-    const fullPath = join(dir, entry);
-    const stats = statSync(fullPath);
-
-    if (stats.isDirectory()) {
-      walk(fullPath, files);
-      continue;
-    }
-
-    if (BINARY_EXTENSIONS.has(extname(entry).toLowerCase())) {
-      continue;
-    }
-
-    if (fullPath === import.meta.filename || fullPath === brandingFile || fullPath === brandingExampleFile) {
-      continue;
-    }
-
-    files.push(fullPath);
-  }
-
-  return files;
-}
-
-function applyReplacements(answers) {
-  const filledKeys = Object.keys(answers).filter((key) => answers[key]);
-
-  if (filledKeys.length === 0) {
-    return { filesChanged: 0, replacementsMade: 0, skipped: Object.keys(answers) };
-  }
-
-  const files = walk(projectRoot);
-  const tokenPattern = new RegExp(filledKeys.map((key) => `__${key}__`).join('|'), 'g');
-
-  let filesChanged = 0;
-  let replacementsMade = 0;
-
-  for (const filePath of files) {
-    let content;
-
-    try {
-      content = readFileSync(filePath, 'utf-8');
-    } catch {
-      continue;
-    }
-
-    if (!content.includes('__') || !tokenPattern.test(content)) {
-      continue;
-    }
-
-    tokenPattern.lastIndex = 0;
-
-    const updated = content.replace(tokenPattern, (match) => {
-      const key = match.slice(2, -2);
-      replacementsMade += 1;
-      return answers[key] ?? match;
-    });
-
-    if (updated !== content) {
-      writeFileSync(filePath, updated, 'utf-8');
-      filesChanged += 1;
-    }
-  }
-
-  const skipped = Object.keys(answers).filter((key) => !answers[key]);
-  return { filesChanged, replacementsMade, skipped };
-}
-
 function main() {
   if (!existsSync(brandingFile)) {
     console.error('clinic-branding.env not found.');
@@ -129,7 +51,8 @@ function main() {
   }
 
   const answers = parseEnvFile(brandingFile);
-  const { filesChanged, replacementsMade, skipped } = applyReplacements(answers);
+  const skipFiles = new Set([import.meta.filename, brandingFile, brandingExampleFile]);
+  const { filesChanged, replacementsMade, skipped } = applyReplacements(projectRoot, answers, skipFiles);
 
   console.log(`Replaced ${replacementsMade} placeholder occurrence(s) across ${filesChanged} file(s).`);
 

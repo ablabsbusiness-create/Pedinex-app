@@ -946,11 +946,6 @@
         });
         const result = await response.json().catch(() => ({}));
 
-        if (response.status === 401) {
-          redirectToLogin();
-          return;
-        }
-
         if (!response.ok || !isTbkPatientId(result?.patientId)) {
           throw new Error(result?.error || 'Unable to load the next patient ID.');
         }
@@ -966,11 +961,6 @@
           patientIdOutput.textContent = 'Assigned on save';
         }
       }
-    }
-
-    function redirectToLogin() {
-      const nextPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-      window.location.href = `/password?next=${encodeURIComponent(nextPath)}`;
     }
 
     function parseDobInput(dayValue, monthValue, yearValue) {
@@ -1117,11 +1107,6 @@
           body: JSON.stringify({ patient: patientRecord })
         });
         result = await response.json().catch(() => ({}));
-
-        if (response.status === 401) {
-          redirectToLogin();
-          return null;
-        }
 
         if (!response.ok || !result?.patientId) {
           throw new Error(result?.error || 'Unable to assign a patient ID right now.');

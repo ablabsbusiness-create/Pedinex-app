@@ -4,8 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "quickstart": "node scripts/quickstart.js",
     "setup": "node scripts/setup-template.js",
     "apply-branding": "node scripts/apply-branding.js",
+    "vercel:env": "node scripts/push-vercel-env.js",
     "predev": "node ./scripts/ensure-iap-assets.mjs",
     "dev": "vite",
     "prebuild": "node ./scripts/ensure-iap-assets.mjs",
